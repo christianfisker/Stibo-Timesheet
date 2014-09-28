@@ -1,0 +1,41 @@
+{
+    "item": { 
+        "id": "001608SORT",
+        "name": "RAIS 900" 
+    },
+    "weeks": [
+        { 
+            "weekNo": 19,
+            "primoQty": 10,
+            "receiptQty": 2,
+            "issueQty": 1,
+            "prodIssueQty": 12.00,
+            "salesQty": -597.00,
+            "salesForcastQty": 30.00,
+            "plannedOrderQty": 15.00,
+            "ultimoQty": -529.00
+        },
+        { 
+            "weekNo": 20,
+            "primoQty": 99,
+            "receiptQty": 13,
+            "issueQty": 4,
+            "prodIssueQty": 12.00,
+            "salesQty": -597.00,
+            "salesForcastQty": 30.00,
+            "plannedOrderQty": 15.00,
+            "ultimoQty": -529.00
+        },
+        { 
+            "weekNo": 21,
+            "primoQty": 1,
+            "receiptQty": 1,
+            "issueQty": -3,
+            "prodIssueQty": 0,
+            "salesQty": -3,
+            "salesForcastQty": 0,
+            "plannedOrderQty": 1,
+            "ultimoQty": 0
+        }
+    ]
+}

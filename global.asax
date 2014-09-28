@@ -1,0 +1,1 @@
+﻿<%@ Application Language="C#" Inherits="Stibo.Timesheet.Application" %>

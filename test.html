@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>STIBO Ugeseddel</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="css/stibo.weeksheet.css" />
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+</head>
+<body>
+
+    <div id="View">
+        <ul data-bind="foreach: values">
+            <li data-bind="text:$data"></li>
+        </ul>
+        <ul>
+            <!-- ko foreach: values -->
+            <li data-bind="text: $data"></li>
+            <!-- /ko -->
+        </ul>
+        <ul data-bind="foreach: questions">
+            <li>
+                <span data-bind="text: question"></span>
+                <!-- ko foreach: options -->
+                    <input type="radio" data-bind="attr: { name: $parent.question }, value: $data, click: $root.selectAnswer($parent, $data)" />
+                <!-- /ko -->
+            </li>
+        </ul>
+        <p data-bind="text: values"></p>
+        <p data-bind="text: $root"></p>
+    </div>
+
+    <!-- jQuery (Required by Bootstrap & Kendo) -->
+    <script src="js/libs/jquery.min.js"></script>
+    <!-- Bootstrap plugins -->
+    <script src="js/libs/bootstrap.min.js"></script>
+    <!-- KnockoutJS -->
+    <script src="js/libs/knockout-3.2.0.js"></script>
+    <!-- UnderscoreJS -->
+    <script src="js/libs/underscore-min.js"></script>
+
+    <script>
+
+        var ViewModel = function () {
+            var self = this;
+
+            self.questions = [
+                { question: 'Q1', options: ['V1', 'V2', 'V3'] },
+                { question: 'Q2', options: ['V1', 'V2', 'V3'] },
+                { question: 'Q3', options: ['V1', 'V2', 'V3'] }
+            ];
+
+            self.answers = ko.observableArray( [] );
+            self.answers = ko.observable( {} );
+
+            self.selectAnswer = function ( _question, _answer ) {
+                var test = 1;
+                self.answers()[_question.question] = _answer;
+                console.dir( self.answers() );
+            };
+
+            self.selectedOption = ko.observable( 'V1' );
+            //self.selectedOptions = ko.observableArray( ['V1'] );
+
+
+            self.selectedOption.subscribe( function () {
+                var test = 1;
+            } );
+
+
+            self.values = ['V1', 'V2', 'V3'];
+
+            self.debug = ko.pureComputed( function () {
+                return self.selectedOption();
+            } );
+        };
+
+        $( function () {
+            ko.applyBindings( new ViewModel(), document.getElementById( 'View' ) );
+        } );
+
+    </script>
+</body>
+</html>

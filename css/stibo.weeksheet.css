@@ -1,0 +1,121 @@
+﻿td.BLANK
+{
+    background-color: #ff0000;
+}
+
+    td.BLANK:hover
+    {
+        background-color: #ff4040;
+    }
+
+td.OPEN
+{
+    background-color: #ff0000;
+}
+
+    td.OPEN:hover
+    {
+        background-color: #ff4040;
+    }
+
+td.SUBMITTED
+{
+    background-color: yellow;
+}
+
+td.APPROVED
+{
+    background-color: #00ff00;
+}
+
+td.APPROVEDTENTATIVE
+{
+    background-color: #567ff2;
+}
+
+td.CLOSED
+{
+    background-color: #888888;
+}
+
+    td.CLOSED:hover
+    {
+        background-color: #aaaaaa;
+    }
+/*
+th.current-left, td.current-left
+{
+    border-left: 3px solid black;
+}
+*/
+
+th.currentWeek
+{
+    background-color: #92c6ff;
+}
+
+th.currentWeekLeft, td.currentWeekLeft
+{
+    border-left: 2px solid black;
+}
+
+th.currentWeekRight, td.currentWeekRight
+{
+    border-right: 2px solid black;
+}
+
+/*
+th.current-right, td.current-right
+{
+    border-right: 3px solid black;
+}
+*/
+
+tr.header
+{
+    background-color: black;
+    color: white;
+}
+
+tr.subheader
+{
+    background-color: lightgray;
+    color: black;
+}
+
+/*
+table.stibo-weeksheet input
+{
+    width: 65px;
+    text-align: right;
+}
+*/
+table.stibo-timesheet-lines
+{
+}
+
+    table.stibo-timesheet-lines input
+    {
+        width: 65px;
+        text-align: right;
+    }
+
+    table.stibo-timesheet-lines td.display
+    {
+        border-right: 1px solid lightgray;
+    }
+
+    table.stibo-timesheet-lines tr.error
+    {
+        background-color: red;
+    }
+
+    table.stibo-timesheet-lines tr.right
+    {
+        text-align: right;
+    }
+
+        table.stibo-timesheet-lines tr.right th
+        {
+            text-align: right;
+        }
