@@ -323,15 +323,14 @@
 
 
     <!-- MODAL WINDOW FOR HELP -->
-    <!--button class="btn btn-primary" data-toggle="modal" data-target="#modal-timesheet-help"><span class="glyphicon glyphicon-question-sign"></span> Hjælp (F1)</button-->
-
-    <div id="modal-timesheet-help" class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-remote="vejledning/vejledning.html">
+    <div id="modal-timesheet-help" class="modal" tabindex="-1" role="dialog" data-remote="vejledning/vejledning.html">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Indhold indlæses fra ekstern fil - vejledning.html -->
             </div>
         </div>
     </div>
+
 
     <!-- jQuery -->
     <script src="js/libs/jquery.min.js"></script>
@@ -354,7 +353,9 @@
     <script src="js/app/overviewviewmodel.js"></script>
     <script src="js/app/timesheetviewmodel.js?v=20140926"></script>
     <script src="js/app/timesheetlineviewmodel.js?v=20140926"></script>
-    <script src="js/app/main.js"></script>
+    <script src="js/app/main.dispatcher.js"></script>
+    <script src="js/app/main.timesheetfactory.js"></script>
+    <script src="js/app/main.js?v=20140928"></script>
 
     <script>
         $( function () {
