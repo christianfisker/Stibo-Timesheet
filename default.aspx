@@ -31,7 +31,7 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div>
-                <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#modal-timesheet-help">Hjælp (F1)</button>
+                <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#modal-timesheet-help">Vejledning</button>
 
                 <!-- LOGIN VIEW - When logged out -->
                 <form id="LoginView" class="navbar-form navbar-right" data-bind="visible: visible">
@@ -403,7 +403,12 @@
                     isCtrl = event.ctrlKey;
 
                 if ( isCtrl ) {
-                    if ( key === 'q' ) {
+                    if ( key === 'v' ) {
+                        // Ctrl + v - shop help
+                        //$.Topic( 'shortcut.help' ).publish();
+                        // No, this binding does not make sense...
+                    }
+                    else if ( key === 'q' ) {
                         // Ctrl + Q - logout user.
                         $.Topic( 'shortcut.logout' ).publish();
                     }
@@ -415,7 +420,10 @@
                 else {
                     if ( keyCode === 112 ) {
                         // F1 key - open help modal if not already open.
-                        $.Topic( 'shortcut.help' ).publish();
+                        
+                        
+                        event.stopPropagation();
+                        event.preventDefault();
                     }
                     if ( keyCode === 27 ) {
                         // Escape - cancel and close current timesheet - not if help modal i open!

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text;
 using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Security;
@@ -43,8 +43,8 @@ namespace Stibo.Timesheet.Nancy
         public static Guid? ValidateUser(string username, string password)
         {
             var data = new Stibo.Timesheet.Data.DataContext();
-            //var user = data.GetUserByLogin(username);
-            var user = data.GetUserByLogin(username, password).FirstOrDefault();
+            var passwordHash = hashPassword(password);
+            var user = data.GetUserByLogin(username, passwordHash).FirstOrDefault();
 
             if (user == null)
             {
@@ -55,6 +55,27 @@ namespace Stibo.Timesheet.Nancy
 
             return user.LoginId;
         }
+
+        public static string hashPassword(string password)
+        {
+            byte[] asciiBytes = Encoding.ASCII.GetBytes(password);
+            int value = 0;
+
+            for (var i = 1; i <= asciiBytes.Length; i++)
+            {
+                value += asciiBytes[i-1] * i + 10;
+            }
+
+            return value.ToString();
+
+            //Function makePassword (s)
+            // For i = 1 To Len(s)
+            //     pswValue = pswValue + 7 + Asc(Mid(s, i, 1)) * i + 3
+            // Next
+            // makePassword = pswValue
+            //End Function
+        }
+
     }
 
 
