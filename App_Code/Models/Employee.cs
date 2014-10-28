@@ -21,5 +21,10 @@ namespace Stibo.Timesheet.Models
         public float SaldoGene { get; set; }
         public DateTime ModifiedDate { get; set; }
         public IEnumerable<Timesheet> Timesheets { get; set; }
+
+        /// <summary>
+        /// Field from User table.
+        /// </summary>
+        public string Username { get; set; }
     }
 }

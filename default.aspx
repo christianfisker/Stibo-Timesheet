@@ -78,7 +78,7 @@
                     </tr>
                     <tr>
                         <th>Name</th>
-                        <th class="hide">Nummer</th>
+                        <th>Nummer</th>
                         <th>Lokation</th>
                         <!-- ko foreach: weekRange -->
                         <th style="text-align: center;" data-bind="text: $data, css: $root.styleHeaderColumnCSS( $data )"></th>
@@ -89,7 +89,7 @@
                     <!-- ko if( $root.isEmployeeVisible( employee ) ) -->
                     <tr>
                         <td data-bind="text: employee.name"></td>
-                        <td class="hide" data-bind="text: employee.id"></td>
+                        <td data-bind="text: employee.username"></td>
                         <td data-bind="text: employee.location"></td>
                         <!-- ko foreach: weeks -->
                         <td data-bind="css: $root.styleBodyColumnCSS( $data ), click: $root.onWeekSelected, attr: { 'title': status }"></td>
@@ -396,7 +396,7 @@
                 // Ctrl + Q - Log out
                 // Ctrl + S - Save active timesheet
 
-                console.log( 'kc = '+event.keyCode+ ', k = '+ event.key+', cc = '+event.charCode+', ctrl = ' + event.ctrlKey );
+                //console.log( 'kc = '+event.keyCode+ ', k = '+ event.key+', cc = '+event.charCode+', ctrl = ' + event.ctrlKey );
 
                 var keyCode = event.keyCode,
                     key = event.key,
@@ -418,13 +418,11 @@
                     }
                 }
                 else {
-                    if ( keyCode === 112 ) {
-                        // F1 key - open help modal if not already open.
-                        
-                        
-                        event.stopPropagation();
-                        event.preventDefault();
-                    }
+                    //if ( keyCode === 112 ) {
+                    //    // F1 key - open help modal if not already open.
+                    //    event.stopPropagation();
+                    //    event.preventDefault();
+                    //}
                     if ( keyCode === 27 ) {
                         // Escape - cancel and close current timesheet - not if help modal i open!
                         $.Topic( 'shortcut.canceltimesheet' ).publish();

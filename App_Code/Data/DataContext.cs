@@ -78,7 +78,12 @@ namespace Stibo.Timesheet.Data
 
         public IEnumerable<Employee> GetEmployees()
         {
-            return Connection.Query<Employee>("select * from Employees");
+            string sql = @"select em.*,us.Username from Employees em
+                join Users as us on us.Id = em.UserId
+                order by us.username";
+
+            return Connection.Query<Employee>(sql);
+            //return Connection.Query<Employee>("select * from Employees");
         }
 
         public IEnumerable<Models.Timesheet> GetTimesheetsForEmployee(long emplId, string startWeek, string endWeek)
