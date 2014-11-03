@@ -10,9 +10,9 @@ namespace Stibo.Timesheet.Models
     /// </summary>
     public class Employee
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
-        public long UserId { get; set; }
+        public string UserId { get; set; }
         public bool IsActive { get; set; }
         public string Location { get; set; }
         public float SaldoFerie { get; set; }

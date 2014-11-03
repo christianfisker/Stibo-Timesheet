@@ -10,14 +10,14 @@ namespace Stibo.Timesheet.Models
 
     public interface IUser : IUserIdentity
     {
-        long Id { get; set; }
+        string Id { get; set; }
         Guid? LoginId { get; set; }
         string Name { get; set; }
         UserRole Role { get; set; }
         //long? EmployeeId { get; set; }
         Employee Employee { get; set; }
 
-        bool HasEmployeeAccess(long employeeId);
+        bool HasEmployeeAccess(string employeeId);
     }
 
 
@@ -38,7 +38,7 @@ namespace Stibo.Timesheet.Models
             UserName = "default";
         }
 
-        public long Id { get; set; }
+        public string Id { get; set; }
 
         public string UserName { get; set; }
         public IEnumerable<string> Claims { get; set; }
@@ -49,7 +49,7 @@ namespace Stibo.Timesheet.Models
         public Employee Employee { get; set; }
         public Guid? LoginId { get; set; }
 
-        public bool HasEmployeeAccess(long employeeId)
+        public bool HasEmployeeAccess(string employeeId)
         {
             //if (this.Role == UserRole.Employee && this.EmployeeId == employeeId ||
             if (this.Role == UserRole.Employee && Employee.UserId == this.Id ||

@@ -120,7 +120,7 @@ namespace Stibo.Timesheet.Business
         /// <param name="id"></param>
         /// <param name="version"></param>
         /// <returns></returns>
-        public object GetTimesheet(long employeeId, string weekNum, UserRole role)
+        public object GetTimesheet(string employeeId, string weekNum, UserRole role)
         {
             Models.Timesheet timesheet = null;
 
@@ -296,7 +296,7 @@ namespace Stibo.Timesheet.Business
             return true;
         }
 
-        public object GetTimesheetHistory(long employeeId, string week)
+        public object GetTimesheetHistory(string employeeId, string week)
         {
             if (_user.HasEmployeeAccess(employeeId))
             {

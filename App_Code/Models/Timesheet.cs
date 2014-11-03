@@ -12,7 +12,7 @@ namespace Stibo.Timesheet.Models
     public class Timesheet : IValidatableObject
     {
         public Guid? Id { get; set; }
-        public long EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         public string Week { get; set; }
         /// <summary>
         /// Produktionssted. Hvilken type ugeseddel der er tale om.
@@ -25,7 +25,7 @@ namespace Stibo.Timesheet.Models
         public string State { get; set; }
         public string Version { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public long ModifiedBy { get; set; }
+        public string ModifiedBy { get; set; }
         public UserRole ModifiedRole { get; set; }
         public bool IsHistory { get; set; }
 
@@ -54,10 +54,10 @@ namespace Stibo.Timesheet.Models
         /// <returns></returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (EmployeeId == 0)
-            {
-                yield return new ValidationResult("EmployeeId must be defined", new[] { "EmployeeId" });
-            }
+            //if (EmployeeId == 0)
+            //{
+            //    yield return new ValidationResult("EmployeeId must be defined", new[] { "EmployeeId" });
+            //}
 
             if (string.IsNullOrEmpty(Week) || Week.Length != 6)
             {

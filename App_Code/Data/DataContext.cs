@@ -71,7 +71,7 @@ namespace Stibo.Timesheet.Data
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public Employee GetEmployeeForUser(long? userId)
+        public Employee GetEmployeeForUser(string userId)
         {
             return Connection.Query<Employee>("select * from Employees where UserId = @userId", new { userId = userId }).FirstOrDefault();
         }
@@ -86,7 +86,7 @@ namespace Stibo.Timesheet.Data
             //return Connection.Query<Employee>("select * from Employees");
         }
 
-        public IEnumerable<Models.Timesheet> GetTimesheetsForEmployee(long emplId, string startWeek, string endWeek)
+        public IEnumerable<Models.Timesheet> GetTimesheetsForEmployee(string emplId, string startWeek, string endWeek)
         {
             return Connection.Query<Models.Timesheet>("SELECT * FROM Timesheets WHERE EmployeeId = @emplId AND Week between @startWeek AND @endWeek AND IsHistory = 0 ORDER BY Week", new { emplId = emplId, startWeek = startWeek, endWeek = endWeek });
         }
@@ -119,7 +119,7 @@ namespace Stibo.Timesheet.Data
         /// <param name="employeeId"></param>
         /// <param name="week"></param>
         /// <returns></returns>
-        public Models.Timesheet GetTimesheet(long employeeId, string week)
+        public Models.Timesheet GetTimesheet(string employeeId, string week)
         {
             Models.Timesheet ret = null;
 
@@ -170,7 +170,7 @@ namespace Stibo.Timesheet.Data
             return Connection.Query<Models.Timesheet>("select top 1 * from Timesheets where Id = @id and isHistory = 0", new { id = id }).FirstOrDefault();
         }
 
-        public Models.Timesheet GetTimesheetHeader(long employeeId, string weekNum, UserRole role)
+        public Models.Timesheet GetTimesheetHeader(string employeeId, string weekNum, UserRole role)
         {
             return Connection.Query<Models.Timesheet>("SELECT TOP 1 * FROM Timesheets WHERE EmployeeId = @employeeId AND [Week] = @weekNum AND ModifiedRole = @role AND ([State] = 'CLOSED' OR IsHistory = 1)",
                 new { employeeId = employeeId, weekNum = weekNum, role = role })
@@ -326,7 +326,7 @@ namespace Stibo.Timesheet.Data
             return count == 1;
         }
 
-        public bool DeleteTimesheetHistory(long employeeId, string week, UserRole role)
+        public bool DeleteTimesheetHistory(string employeeId, string week, UserRole role)
         {
             string sql = @"DELETE FROM Timesheets WHERE EmployeeId = @employeeId AND [Week] = @week AND IsHistory = 1 AND ModifiedRole >= @role";
 
