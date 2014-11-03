@@ -39,6 +39,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     self.employee = null;
     self.timesheet = null;
 
+    self.employeeSaldoFerie = ko.observable(); // 20141103
+    self.employeeSaldoFerieFri = ko.observable(); // 20141103
+    self.employeeSaldoAfspadsering = ko.observable(); //20141103
+    self.employeeSaldoGene = ko.observable(); //20141103
+
     self.employeeId = ko.observable();
     self.employeeName = ko.observable();
     self.week = ko.observable();
@@ -426,6 +431,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
         self.timesheet = timesheet;
         self.employee = employee;
+
+        self.employeeSaldoFerie( employee.saldoFerie ); // 20141103
+        self.employeeSaldoFerieFri( employee.saldoFerieFri ); // 20141103
+        self.employeeSaldoAfspadsering( employee.saldoAfspadsering ); //20141103
+        self.employeeSaldoGene( employee.saldoGene ); //20141103
 
         self.employeeId( employee.id );
         self.employeeName( employee.name );

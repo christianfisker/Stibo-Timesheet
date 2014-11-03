@@ -268,16 +268,16 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="text-align: left;">Ferie</td><td data-bind="text: employee.saldoFerie.toFixed(2)"></td>
+                            <td style="text-align: left;">Ferie</td><td data-bind="text: employeeSaldoFerie().toFixed(2)"></td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;">FerieFri</td><td data-bind="text: employee.saldoFerieFri.toFixed(2)"></td>
+                            <td style="text-align: left;">FerieFri</td><td data-bind="text: employeeSaldoFerieFri().toFixed(2)"></td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;">Afspadsering</td><td data-bind="text: employee.saldoAfspadsering.toFixed(2)"></td>
+                            <td style="text-align: left;">Afspadsering</td><td data-bind="text: employeeSaldoAfspadsering().toFixed(2)"></td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;">Genetime</td><td data-bind="text: employee.saldoGene.toFixed(2)"></td>
+                            <td style="text-align: left;">Genetime</td><td data-bind="text: employeeSaldoGene().toFixed(2)"></td>
                         </tr>
                     </tbody>
                     <script type="text/html">
@@ -351,7 +351,7 @@
     <script src="js/app/userviewmodel.js"></script>
     <script src="js/app/loginviewmodel.js"></script>
     <script src="js/app/overviewviewmodel.js"></script>
-    <script src="js/app/timesheetviewmodel.js?v=20140926"></script>
+    <script src="js/app/timesheetviewmodel.js?v=20141103"></script>
     <script src="js/app/timesheetlineviewmodel.js?v=20140926"></script>
     <script src="js/app/main.dispatcher.js"></script>
     <script src="js/app/main.timesheetfactory.js"></script>
