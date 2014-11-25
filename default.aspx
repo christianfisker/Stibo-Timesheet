@@ -107,13 +107,13 @@
 
         <!-- HEADER -->        
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <h3>Ugeseddel for uge <span data-bind="text: weekNumber()"></span>&nbsp;
                     <small><span data-bind="text: employeeName"></span>&nbsp;<span class="hide" data-bind="text: employeeId"></span></small>
                 </h3>
                 <p class="hide" data-bind="text: statusName()"></p>
             </div>
-            <div class="col-md-4 text-right" data-bind="visible: isOpen">
+            <div class="col-md-5 text-right" data-bind="visible: isOpen">
                 <p style="font-size: 0.2em;">&nbsp;</p>
                 <button type="submit" class="btn btn-info" data-bind="click: onBtnSave" title="">Gem</button>
                 <!-- ko if( userRole() === 1 ) -->
@@ -127,7 +127,10 @@
                 <!-- /ko -->
                 <button type="submit" class="btn btn-default" data-bind="click: onBtnCancel">Annullér</button>
             </div>
-            <div class="col-md-4 text-right" data-bind="visible: isClosed">
+            <div class="col-md-2" data-bind="visible: isClosed">
+                <p style="margin-top: 12px;">Godkendt af: <span data-bind="text: modifiedByName"></span></p>
+            </div>
+            <div class="col-md-3 text-right" data-bind="visible: isClosed">
                 <p style="font-size: 0.2em;">&nbsp;</p>
                 <div class="btn-group" data-toggle="buttons">
                     <label class="btn btn-primary" data-bind="click: onBtnLoadEmployeeVersion" >
@@ -351,7 +354,7 @@
     <script src="js/app/userviewmodel.js"></script>
     <script src="js/app/loginviewmodel.js"></script>
     <script src="js/app/overviewviewmodel.js"></script>
-    <script src="js/app/timesheetviewmodel.js?v=20141103"></script>
+    <script src="js/app/timesheetviewmodel.js?v=20141124"></script>
     <script src="js/app/timesheetlineviewmodel.js?v=20140926"></script>
     <script src="js/app/main.dispatcher.js"></script>
     <script src="js/app/main.timesheetfactory.js"></script>

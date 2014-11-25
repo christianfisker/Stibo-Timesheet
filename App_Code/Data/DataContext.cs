@@ -167,12 +167,24 @@ namespace Stibo.Timesheet.Data
 
         public Models.Timesheet GetTimesheetHeader(Guid? id)
         {
-            return Connection.Query<Models.Timesheet>("select top 1 * from Timesheets where Id = @id and isHistory = 0", new { id = id }).FirstOrDefault();
+            //string sqlStatement = @"select top 1 * from Timesheets where Id = @id and isHistory = 0";
+            string sqlStatement = @"SELECT TOP 1 ts.*, Users.Name AS ModifiedByName
+                FROM Timesheets AS ts
+                LEFT JOIN Users ON Users.Id = ts.ModifiedBy
+                WHERE ts.Id = @id AND isHistory = 0";
+
+            return Connection.Query<Models.Timesheet>( sqlStatement, new { id = id }).FirstOrDefault();
         }
 
         public Models.Timesheet GetTimesheetHeader(string employeeId, string weekNum, UserRole role)
         {
-            return Connection.Query<Models.Timesheet>("SELECT TOP 1 * FROM Timesheets WHERE EmployeeId = @employeeId AND [Week] = @weekNum AND ModifiedRole = @role AND ([State] = 'CLOSED' OR IsHistory = 1)",
+            //string sqlStatement = @"SELECT TOP 1 * FROM Timesheets WHERE EmployeeId = @employeeId AND [Week] = @weekNum AND ModifiedRole = @role AND ([State] = 'CLOSED' OR IsHistory = 1)";
+            string sqlStatement = @"SELECT TOP 1 ts.*, users.Name AS ModifiedByName 
+                FROM Timesheets AS ts
+                LEFT JOIN Users ON Users.Id = ts.ModifiedBy
+                WHERE EmployeeId = @employeeId AND [Week] = @weekNum AND ModifiedRole = @role AND ([State] = 'CLOSED' OR IsHistory = 1)";
+
+            return Connection.Query<Models.Timesheet>(sqlStatement,
                 new { employeeId = employeeId, weekNum = weekNum, role = role })
                 .FirstOrDefault();
         }

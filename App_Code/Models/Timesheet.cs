@@ -27,6 +27,7 @@ namespace Stibo.Timesheet.Models
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
         public UserRole ModifiedRole { get; set; }
+        public string ModifiedByName { get; set; }
         public bool IsHistory { get; set; }
 
         public List<TimesheetLine> Lines { get; set; }

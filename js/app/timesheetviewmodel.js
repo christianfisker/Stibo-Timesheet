@@ -49,6 +49,8 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     self.week = ko.observable();
     self.location = ko.observable();
 
+    self.modifiedByName = ko.observable(); // 20141124 - timesheet.modifiedByName
+
     // changeable fields
     self.machine = ko.observable( null );
     self.shift = ko.observable( null );
@@ -446,6 +448,8 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         self.hasLeadPressSupplement( timesheet.hasLeadPressSupplement );
         self.comment( timesheet.comment );
         self.lines( _.map( timesheet.lines, function ( line ) { return new STIBO.Timesheet.TimesheetLineViewModel( app, self, line ) } ) );
+
+        self.modifiedByName( timesheet.modifiedByName ); // 20141124
 
         self.userRole( app.user.role );
         self.state( timesheet.state );
