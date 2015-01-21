@@ -5,6 +5,7 @@ using Nancy.Bootstrapper;
 using Nancy.Responses;
 using Nancy.Responses.Negotiation;
 using Nancy.TinyIoc;
+using Nancy.Json;
 
 namespace Stibo.Timesheet.Nancy
 {
@@ -21,6 +22,8 @@ namespace Stibo.Timesheet.Nancy
             base.ApplicationStartup(container, pipelines);
 
             pipelines.OnError += HandleExceptions;
+
+            JsonSettings.MaxJsonLength = int.MaxValue; // Because of max payload exception occured in LIVE
         }
 
         protected override void ConfigureRequestContainer(TinyIoCContainer container, NancyContext context)
