@@ -11,8 +11,8 @@ var STIBO = window.STIBO || {};
 STIBO.Timesheet = STIBO.Timesheet || {};
 
 
-STIBO.Timesheet.timesheetFactory = function ( employeeId, timesheetId, weekNum, historyVersion ) {
-
+STIBO.Timesheet.timesheetFactory = function ( app, employeeId, timesheetId, weekNum, historyVersion ) {
+    app.debug( "timesheetFactory(" + employeeId + ", " + timesheetId + ", " + weekNum + ", " + historyVersion + ")" );
     var dataService = STIBO.dataService;
 
     // 1. get employee from server
@@ -29,13 +29,16 @@ STIBO.Timesheet.timesheetFactory = function ( employeeId, timesheetId, weekNum, 
         createTimesheet( employee, weekNum ); // TODO: not completed... wrong employee object...
     }
     else if ( historyVersion !== undefined ) {
+        // Load specific version of existing timesheet.
         loadTimesheetVersion( employeeId, weekNum, historyVersion );
     }
     else {
-        loadTimesheet( timesheetId, historyVersion );
+        // Load existing active timesheet.
+        loadTimesheet( timesheetId); //, historyVersion ); // change 20140106
     }
 
     function loadEmployee( employeeId ) {
+        app.debug("timesheetFactory.loadEmployee("+ employeeId +")");
         $.when(
                 dataService.getEmployee( employeeId )
             )
@@ -52,6 +55,7 @@ STIBO.Timesheet.timesheetFactory = function ( employeeId, timesheetId, weekNum, 
     //}
 
     function loadTimesheet( timesheetId ) {
+        app.debug( "timesheetFactory.loadTimesheet(" + timesheetId + ")" );
         $.when(
                 dataService.getTimesheet( timesheetId )
             )
@@ -61,7 +65,9 @@ STIBO.Timesheet.timesheetFactory = function ( employeeId, timesheetId, weekNum, 
             .always();
     }
 
+
     function loadTimesheetVersion( employeeId, weekNum, role ) {
+        app.debug( "timesheetFactory.loadTimesheetVersion("+employeeId+", "+ weekNum+ ","+role+")" );
         $.when(
                 dataService.getTimesheetVersion( employeeId, weekNum, role )
             )
@@ -76,57 +82,47 @@ STIBO.Timesheet.timesheetFactory = function ( employeeId, timesheetId, weekNum, 
             .always();
     }
 
+
     function onTimesheetLoaded( data ) {
-        //app.debug( 'TimesheetFactory.onTimesheetLoaded()' );
-        //var newLines = [];
-
-        //app.debug( data );
-
-        //TODO: Is the returned data valid?
-
-        //self.header = new STIBO.viewModels.TimesheetHeader( self, data );
+        app.debug( 'timesheetFactory.onTimesheetLoaded(...)' );
 
         // Get line configuration for location that the employee belongs to.
         var configLines = STIBO.Timesheet.Configuration.lines.getLocation( employee.location );
 
         // Iterate over config lines and match them up with existing timesheet lines.
+        // Also sort returned lines according to the configuration.
+        var linesSorted = [];
         for ( var i = 0; i < configLines.length; i++ ) {
             var configLine = configLines[i];
             var currentLine = STIBO.utils.find( data.lines, 'type', configLines[i].type );
             if ( currentLine ) {
                 // found a matching line
                 currentLine.description = configLine.description;
-
-                //newLines.push( new STIBO.viewModels.TimesheetLine( self, currentLine ) );
+                linesSorted.push( currentLine );
             }
             else {
-                // line is missing
-
-                //newLines.push( new STIBO.viewModels.TimesheetLine( self, { type: configLine.type, description: configLine.description } ) );
+                // timesheet line does not exist in configuration. What to do if this happens?
+                //TODO: What if timesheet has lines with type not defined in line config??
+                linesSorted.push( new STIBO.timesheet.models.TimesheetLine( configLine.type ) );
             }
-
-            //TODO: What if timesheet has lines with type not defined in line config??
         }
+
+        // TODO:
+        // !! What if the configuration line does not exist in the timesheet data?
+        // This is relevant for SUM and TEXT lines!
+        // Add these manually?
+
+        // Replace returned lines with sorted lines.
+        data.lines = linesSorted;
 
         timesheet = data;
 
-        //self.lines = newLines;
-
-        //for ( var i = 0; i < data.lines.length; i++ ) {
-        //    // TODO: ?Skal der itereres over config lines og så finde ugeseddel linie ud fra dette. Opret tom hvis den mangler. Sortering efter config.
-
-        //    // Find the line config that matches the type of the current timesheet line.
-        //    var configLine = STIBO.utils.find( configLines, 'type', data.lines[i].type );
-        //    data.lines[i].description = configLine.description;
-
-        //    self.lines.push( new STIBO.viewModels.TimesheetLine( self, data.lines[i] ) );
-        //}
-
     };
+
 
     // Create empty timesheet header and lines ready for editing.
     function createTimesheet( employee, weekNum ) {
-
+        app.debug( "timesheetFactory.createTimesheet(" + employeeId + ", " + weekNum + ")" );
         var lines = [];
 
         timesheet = new STIBO.timesheet.models.Timesheet( employee.id, employee.location, weekNum );

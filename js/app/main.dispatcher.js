@@ -35,6 +35,7 @@ STIBO.Timesheet = STIBO.Timesheet || {};
 //      timesheet.history.getversion
 //
 STIBO.Timesheet.Dispatcher = function ( application ) {
+    application.debug( 'new Dispatcher()' );
 
     var app = application,
         dataService = STIBO.dataService;
@@ -71,6 +72,7 @@ STIBO.Timesheet.Dispatcher = function ( application ) {
     } );
 
     function login( credentials ) {
+        app.debug( 'Dispatcher.login()' );
 
         //TODO: show progress...
 
@@ -157,8 +159,9 @@ STIBO.Timesheet.Dispatcher = function ( application ) {
 
     // Load timesheet from server and dispatch...
     function getTimesheet( week ) {
+        app.debug( 'Dispatcher.getTimesheet( '+week+' )' );
 
-        var timesheet = STIBO.Timesheet.timesheetFactory( week.employee.id, week.id, week.week, week.historyVersion );
+        var timesheet = STIBO.Timesheet.timesheetFactory( application, week.employee.id, week.id, week.week, week.historyVersion );
 
         if ( timesheet.timesheet !== null && timesheet.employee !== null ) {
             app.debug( 'publish - notification.timesheet.loaded' );
@@ -168,6 +171,7 @@ STIBO.Timesheet.Dispatcher = function ( application ) {
     }
 
     function loadEmployee( employeeId ) {
+        app.debug( 'Dispatcher.loadEmployee( '+employeeId+' )' );
         $.when(
                 dataService.getEmployee( employeeId )
             )
@@ -178,6 +182,7 @@ STIBO.Timesheet.Dispatcher = function ( application ) {
     }
 
     function onEmployeeLoaded( data ) {
+        app.debug( 'Dispatcher.onEmployeeLoaded(...)' );
         app.debug( data );
 
         self.employee = data;
@@ -187,7 +192,7 @@ STIBO.Timesheet.Dispatcher = function ( application ) {
 
     // Save timesheet to backend and reload/refresh the overview.
     function onTimesheetSave( timesheet ) {
-        app.debug( 'Dispatcher.onTimesheetSave()' );
+        app.debug( 'Dispatcher.onTimesheetSave(...)' );
         app.debug( timesheet );
 
         $.when( STIBO.dataService.saveTimesheet( timesheet ) )

@@ -24,7 +24,7 @@ STIBO.Timesheet = STIBO.Timesheet || {};
 //      notification.timesheet.clear
 //
 STIBO.Timesheet.TimesheetOverviewViewModel = function ( app ) {
-    app.debug( 'TimesheetOverviewViewModel()' );
+    app.debug( 'new TimesheetOverviewViewModel()' );
 
     var self = this;
 
@@ -36,7 +36,7 @@ STIBO.Timesheet.TimesheetOverviewViewModel = function ( app ) {
     self.currentWeek = null;
 
     self.isEmployeeVisible = function ( employee ) {
-        app.debug( 'TimesheetOverviewViewModel.isEmployeeVisible()' );
+        app.debug( 'timesheetOverviewViewModel.isEmployeeVisible()' );
 
         return ( self.app.currentEmployee === null || employee.id === self.app.currentEmployee.id );
     };
@@ -45,7 +45,7 @@ STIBO.Timesheet.TimesheetOverviewViewModel = function ( app ) {
     //region - events
 
     self.onWeekSelected = function ( week, event ) {
-        app.debug( 'TimesheetOverviewViewModel.onWeekSelected() - (' + week.week + ', {' + week.id + '})' );
+        app.debug( 'timesheetOverviewViewModel.onWeekSelected() - (' + week.week + ', {' + week.id + '})' );
 
         $.Topic( 'timesheetoverview.onselected' ).publish( week );
     };
@@ -91,7 +91,7 @@ STIBO.Timesheet.TimesheetOverviewViewModel = function ( app ) {
     }
 
     function onLoaded( overview ) {
-        app.debug( 'TimesheetOverviewViewModel.onLoaded()' );
+        app.debug( 'timesheetOverviewViewModel.onLoaded()' );
 
         self.currentWeek = overview.weekRange.currentWeek;
         self.weekRange( overview.weekRange.sequence );
@@ -101,6 +101,10 @@ STIBO.Timesheet.TimesheetOverviewViewModel = function ( app ) {
     }
 
     $.Topic( 'notification.user.loggedout' ).subscribe( reset );
+    //$.Topic( 'notification.timesheet.loaded' ).subscribe( function ( overview ) {
+    //    self.app.debug( "subscriber - notification.timesheet.loaded " );
+    //    onLoaded( overview );
+    //} );
     $.Topic( 'notification.timesheetoverview.loaded' ).subscribe( onLoaded );
     $.Topic( 'notification.timesheet.loaded' ).subscribe( refresh );
     //$.Topic( 'notification.timesheet.all' ).subscribe( function () { alert( 'loaded' ); } );

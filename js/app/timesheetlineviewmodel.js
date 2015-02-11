@@ -16,93 +16,124 @@ STIBO.Timesheet = STIBO.Timesheet || {};
 //
 //
 STIBO.Timesheet.TimesheetLineViewModel = function ( app, parent, model ) {
-    app.debug( 'TimesheetLineViewModel()' );
 
-    var self = this;
+    app.debug( 'new TimesheetLineViewModel()' );
 
-    self.type = model.type;
-    self.description = parent.getLineConfig( model.type ).description;
-    self.sunday = ko.observable( STIBO.utils.numberToHours( model.sunday ) );
-    self.monday = ko.observable( STIBO.utils.numberToHours( model.monday ) );
-    self.tuesday = ko.observable( STIBO.utils.numberToHours( model.tuesday ) );
-    self.wednesday = ko.observable( STIBO.utils.numberToHours( model.wednesday ) );
-    self.thursday = ko.observable( STIBO.utils.numberToHours( model.thursday ) );
-    self.friday = ko.observable( STIBO.utils.numberToHours( model.friday ) );
-    self.saturday = ko.observable( STIBO.utils.numberToHours( model.saturday ) );
+    this.app = app;
+    this.lineConfig = parent.getLineConfig( model.type );
+    this.model = model;
 
-    // Total hours for this timesheet line. (some lines are not counted towards timesheet total)
-    self.totalForLine = ko.pureComputed( function () {
-        app.debug( 'TimesheetLineViewModel.totalForLine()' );
+    this.type = model.type;
+    this.description = this.lineConfig.description;
+    this.sunday = ko.observable( STIBO.utils.numberToHours( model.sunday ) );
+    this.monday = ko.observable( STIBO.utils.numberToHours( model.monday ) );
+    this.tuesday = ko.observable( STIBO.utils.numberToHours( model.tuesday ) );
+    this.wednesday = ko.observable( STIBO.utils.numberToHours( model.wednesday ) );
+    this.thursday = ko.observable( STIBO.utils.numberToHours( model.thursday ) );
+    this.friday = ko.observable( STIBO.utils.numberToHours( model.friday ) );
+    this.saturday = ko.observable( STIBO.utils.numberToHours( model.saturday ) );
 
-        var total = 0;
+    // Total hours for this timesheet line.
+    this.totalForLine = ko.pureComputed( this._totalForLine, this );
 
-        try {
-            total =
-                parseFloat( '0' + self.sunday() ) +
-                parseFloat( '0' + self.monday() ) +
-                parseFloat( '0' + self.tuesday() ) +
-                parseFloat( '0' + self.wednesday() ) +
-                parseFloat( '0' + self.thursday() ) +
-                parseFloat( '0' + self.friday() ) +
-                parseFloat( '0' + self.saturday() );
-        }
-        catch ( ex ) {
-            app.debug( 'Tried to parse invalid value...' );
-            total = 0;
-        }
-
-        return STIBO.utils.numberToHours( total );
-    } );
-
-    self.totalForTimesheet = ko.pureComputed( function () {
-        app.debug( 'TimesheetLineViewModel.totalForTimesheet()' );
-
-        var total = 0,
-            lineTotal = 0,
-            lineConfig = parent.getLineConfig( self.type );
-
-
-        // Is !ignoreInTotal then get value from totalForLine
-        if ( lineConfig.includeInColumnSum !== false ) {
-            total = self.totalForLine();
-            total = STIBO.utils.hoursToNumber( total );
-
-            // If sumNegative, then subtract hours from total (overtime).
-            if ( lineConfig.sumNegative === true ) {
-                total = -total;
-            }
-        }
-
-        return total;
-    } );
-
-    self.isDirty = function () {
-        app.debug( 'TimesheetLineViewModel.isDirty()' );
-
-        var flag = false;
-        flag = 
-            self.sunday() != model.sunday ||
-            self.monday() != model.monday ||
-            self.tuesday() != model.tuesday ||
-            self.wednesday() != model.wednesday ||
-            self.thursday() != model.thursday ||
-            self.friday() != model.friday ||
-            self.saturday() != model.saturday;
-
-        return flag;
-    };
-
-    self.getData = function () {
-        if ( self.isDirty() ) {
-            model.sunday = parseFloat(self.sunday());
-            model.monday = parseFloat(self.monday());
-            model.tuesday = parseFloat(self.tuesday());
-            model.wednesday = parseFloat(self.wednesday());
-            model.thursday = parseFloat(self.thursday());
-            model.friday = parseFloat(self.friday());
-            model.saturday = parseFloat(self.saturday());
-        }
-
-        return model;
-    };
+    // Total hours for this timesheet line. Returns 0 if the total is not to be counted towards timesheet total.
+    //this.totalForTimesheet = ko.pureComputed( this._totalForTimesheet, this );
 };
+
+STIBO.Timesheet.TimesheetLineViewModel.prototype._totalForLine = function () {
+
+    this.app.debug( 'timesheetLineViewModel.totalForLine()' );
+
+    var total = 0;
+
+    try {
+        total =
+            parseFloat( '0' + this.sunday() ) +
+            parseFloat( '0' + this.monday() ) +
+            parseFloat( '0' + this.tuesday() ) +
+            parseFloat( '0' + this.wednesday() ) +
+            parseFloat( '0' + this.thursday() ) +
+            parseFloat( '0' + this.friday() ) +
+            parseFloat( '0' + this.saturday() );
+    }
+    catch ( ex ) {
+        this.app.debug( 'Tried to parse invalid value...' );
+        total = 0;
+    }
+
+    return STIBO.utils.numberToHours( total );
+};
+
+STIBO.Timesheet.TimesheetLineViewModel.prototype.totalForTimesheet = function ( sumGroup ) {
+
+    this.app.debug( 'timesheetLineViewModel.totalForTimesheet()' );
+
+    var total = 0;
+
+    // Is !ignoreInTotal then get value from totalForLine
+    if ( this.lineConfig.sumGroup === sumGroup && this.lineConfig.includeInGroupSum !== false ) {
+        total = this.totalForLine();
+        total = STIBO.utils.hoursToNumber( total );
+
+        // If sumNegative, then subtract hours from total (overtime).
+        if ( this.lineConfig.sumNegative === true ) {
+            total = -total;
+        }
+    }
+
+    return total;
+};
+
+STIBO.Timesheet.TimesheetLineViewModel.prototype.isDirty = function () {
+
+    this.app.debug( 'timesheetLineViewModel.isDirty()' );
+
+    var flag = false;
+
+    flag =
+        this.sunday() != this.model.sunday ||
+        this.monday() != this.model.monday ||
+        this.tuesday() != this.model.tuesday ||
+        this.wednesday() != this.model.wednesday ||
+        this.thursday() != this.model.thursday ||
+        this.friday() != this.model.friday ||
+        this.saturday() != this.model.saturday;
+
+    return flag;
+};
+
+//
+// Called by timesheetViewModel.getData()
+STIBO.Timesheet.TimesheetLineViewModel.prototype.getData = function () {
+
+    this.app.debug( 'timesheetLineViewModel.getData()' );
+
+    if ( this.lineConfig.saveToDatabase === false ) {
+        return null;
+    }
+
+    if ( this.isDirty() ) {
+        this.model.sunday = parseFloat( this.sunday() );
+        this.model.monday = parseFloat( this.monday() );
+        this.model.tuesday = parseFloat( this.tuesday() );
+        this.model.wednesday = parseFloat( this.wednesday() );
+        this.model.thursday = parseFloat( this.thursday() );
+        this.model.friday = parseFloat( this.friday() );
+        this.model.saturday = parseFloat( this.saturday() );
+    }
+
+    return this.model;
+};
+
+STIBO.Timesheet.TimesheetLineViewModel.prototype.getLineType = function () {
+    return this.lineConfig.lineType;
+}
+
+STIBO.Timesheet.TimesheetLineViewModel.prototype.getLineView = function () {
+    return this.lineConfig.lineView;
+}
+
+STIBO.Timesheet.TimesheetLineViewModel.prototype.getSumGroup = function () {
+    return this.lineConfig.sumGroup;
+}
+

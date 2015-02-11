@@ -26,7 +26,7 @@ STIBO.Timesheet = STIBO.Timesheet || {};
 //      $.Topic( 'notification.user.loggedout' ).subscribe( reset );
 //
 STIBO.Timesheet.TimesheetViewModel = function ( app ) {
-    app.debug( 'TimesheetViewModel()' );
+    app.debug( 'new TimesheetViewModel()' );
 
     var self = this,
         boundElement = null,
@@ -60,16 +60,44 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     self.state = ko.observable();
     self.lines = ko.observableArray( [] ); 
 
-    // 
+    // Returns an array of available shifts depending on the selected machine/team.
+    self.teamShifts = ko.pureComputed( function () {
+        app.debug( 'timesheetViewModel.teamShifts()' );
+
+        var allShifts = STIBO.Timesheet.Configuration.shifts.getLocation( self.location() );
+        var machine = self.machine();
+        
+        if ( machine === null ) {
+            return [];
+        }
+        else {
+            return _.filter( allShifts, function ( shift ) { return shift.teamId === machine.teamId; } );
+        }
+    } );
+
+    // Frontend event - machine/team selected.
+    self.selectMachine = function ( machine, event ) {
+        app.debug( 'timesheetViewModel.selectMachine(...)' );
+
+        var currMachine;
+
+        if ( self.isOpen() ) {
+            currMachine = self.machine();
+            if ( currMachine === null || currMachine.id !== machine.id ) {
+                self.machine( machine );
+                self.shift( null );
+            }
+        }
+    };
+
+    // Frontend event - shift selected.
     self.selectShift = function ( shift, event ) {
+        app.debug( 'timesheetViewModel.selectShift(...)' );
+
         if ( self.isOpen() )
             self.shift( shift.id );
     };
 
-    self.selectMachine = function ( machine, event ) {
-        if ( self.isOpen() )
-            self.machine( machine.id );
-    };
 
     // Display fields
     self.weekNumber = function () {
@@ -82,7 +110,7 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
     // calculated fields
     self.brugtFerie = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.brugtFerie()' );
+        app.debug( 'timesheetViewModel.brugtFerie()' );
 
         var hours = 0,
             line = STIBO.utils.find( self.lines(), 'type', 'G' ),
@@ -163,21 +191,55 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
     //# region - configuration
 
+    // Returns all machines. This does not changes so should not need to be computed! TODO!!
     self.machines = ko.pureComputed( function () {
         return STIBO.Timesheet.Configuration.machines.getLocation( self.location() );
     } );
 
     self.shifts = ko.pureComputed( function () {
         return STIBO.Timesheet.Configuration.shifts.getLocation( self.location() );
+        //var machine = self.machine();
+        //var teamShifts = [];
+
+        //if ( machine !== null ) {
+        //    var allShifts = STIBO.Timesheet.Configuration.shifts.getLocation( self.location() );
+        //    teamShifts = _.filter( allShifts, function ( shift ) { return shift.teamId === machine.teamId; } );
+        //}
+
+        //return teamShifts;
     } );
 
     //# end region - configuration
 
     // total hours for whole timesheet. iterates over lines and sums the line totals.
     self.total = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.total()' );
+        app.debug( 'timesheetViewModel.total()' );
 
         var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet() }, 0 );
+        return STIBO.utils.numberToHours( total, true );
+    } );
+
+    // Total hours registered for sumGroup 'hours'. Normal hours used by all users.
+    self.totalHours = ko.pureComputed( function () {
+        app.debug( 'timesheetViewModel.total()' );
+
+        var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet( 'hours' ) }, 0 );
+        return STIBO.utils.numberToHours( total, true );
+    } );
+
+    // Total hours registered for sumGroup 'markup1'. Used by 'Bogbind' users.
+    self.totalSupplement1Hours = ko.pureComputed( function () {
+        app.debug( 'timesheetViewModel.totalSupplement1Hours()' );
+
+        var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet( 'supplement1' ) }, 0 );
+        return STIBO.utils.numberToHours( total, true );
+    } );
+
+    // Total hours registered for sumGroup 'markup2'. Used by 'Bogbind' users.
+    self.totalSupplement2Hours = ko.pureComputed( function () {
+        app.debug( 'timesheetViewModel.totalSupplement2Hours()' );
+
+        var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet( 'supplement2' ) }, 0 );
         return STIBO.utils.numberToHours( total, true );
     } );
 
@@ -193,7 +255,7 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
     // Get a background color depending on entered hours compared with norm hours, as defined by the selected shift.
     self.getTotalBackgroundColor = ko.pureComputed(function () {
-        app.debug( 'TimesheetViewModel.getTotalBackgroundColor()' );
+        app.debug( 'timesheetViewModel.getTotalBackgroundColor()' );
         var shiftTmp = self.shift(); // debug
         // requirements
         if ( self.shift() === null )
@@ -205,7 +267,8 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         var shift = STIBO.utils.find( self.shifts(), 'id', self.shift() );
 
         normHours = shift.hours;
-        totalHours = parseFloat( self.total() );
+        //totalHours = parseFloat( self.total() );
+        totalHours = parseFloat( self.totalHours() );
         totalHours = isNaN( totalHours ) ? 0 : totalHours;
 
         if ( totalHours === normHours )
@@ -304,6 +367,8 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
 
     function validate( verbose ) {
+        app.debug( 'timesheetViewModel.validate( ' + verbose + ' )' );
+
         var ok = true,
             errorList = [];
 
@@ -320,8 +385,16 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
         //ok = self.header.validate( errorList ) && ok;
 
-        if ( self.machines().length > 0 && isStringEmpty( self.machine() ) ) {
-            errorList.push( 'Der er ikke valgt nogen maskine.' );
+        //if ( self.machines().length > 0 && isStringEmpty( self.machine() ) ) {
+        if ( self.machines().length > 0 && self.machine() === null ) {
+
+            if ( self.location() === 'Bogbind' ) {
+                errorList.push( 'Der er ikke valgt hold/tur.' );
+            }
+            else {
+                errorList.push( 'Der er ikke valgt maskine.' );
+            }
+
             ok = false;
         }
 
@@ -372,7 +445,7 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     };
 
     self.onBtnLoadPayrollVersion = function () {
-        app.debug( 'TimesheetViewModel.onBtnLoadPayrollVersion()' );
+        app.debug( 'timesheetViewModel.onBtnLoadPayrollVersion()' );
         $.Topic( 'timesheet.history.getversion' ).publish( self.timesheet.id, self.timesheet.week, 3 );
     };
 
@@ -380,7 +453,7 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
     // True if the timesheet has been changed by the user.
     function isDirty() {
-        app.debug( 'TimesheetViewModel.isDirty()' );
+        app.debug( 'timesheetViewModel.isDirty()' );
 
         var flag = false;
 
@@ -388,7 +461,8 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
             return flag;
 
         flag =
-            self.machine() != self.timesheet.machine ||
+            (self.machine() !== null && self.machine().id != self.timesheet.machine) ||
+            //self.machine() != self.timesheet.machine ||
             self.shift() != self.timesheet.shift ||
             self.hasLeadPressSupplement() != self.timesheet.hasLeadPressSupplement ||
             self.comment() != self.timesheet.comment;
@@ -402,33 +476,39 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     };
 
     self.getData = function ( _isDirty ) {
-        app.debug( 'TimesheetViewModel.getData()' );
+        app.debug( 'timesheetViewModel.getData()' );
 
         var lines = [];
 
-        //Der er vist ikke behov for at undersøge for 'dirtyness'...
-        //if ( _isDirty === true || isDirty() ) {
+        self.timesheet.machine = self.machine() === null ? null : self.machine().id;
+        //self.timesheet.machine = self.machine();
+        self.timesheet.shift = self.shift();
+        self.timesheet.comment = self.comment();
+        self.timesheet.hasLeadPressSupplement = self.hasLeadPressSupplement();
+        self.timesheet.supplement1Hours = STIBO.utils.hoursToNumber( self.totalSupplement1Hours() );
+        self.timesheet.supplement2Hours = STIBO.utils.hoursToNumber( self.totalSupplement2Hours() );
 
-            self.timesheet.machine = self.machine();
-            self.timesheet.shift = self.shift();
-            self.timesheet.comment = self.comment();
-            self.timesheet.hasLeadPressSupplement = self.hasLeadPressSupplement();
+        // Get updated timesheet lines.
+        lines = _.map( self.lines(), function ( line ) { return line.getData(); } );
 
-            lines = _.map( self.lines(), function ( line ) { return line.getData(); } );
-            self.timesheet.lines = lines;
-        //}
+        // Remove 'null' lines. They represent lines that we dont want saved in the database.
+        lines = _.filter( lines, function ( line ) {
+            return line !== null;
+        } );
+
+        self.timesheet.lines = lines;
 
         return self.timesheet;
     };
 
     self.bind = function ( element ) {
-        app.debug( 'TimesheetViewModel.bind()' );
+        app.debug( 'timesheetViewModel.bind()' );
 
         boundElement = element;
     };
 
     function view( employee, timesheet ) {
-        app.debug( 'TimesheetViewModel.view()' );
+        app.debug( 'timesheetViewModel.view()' );
         //app.debug( employee );
 
         self.timesheet = timesheet;
@@ -443,7 +523,8 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         self.employeeName( employee.name );
         self.week( timesheet.week );
         self.location( timesheet.location );
-        self.machine( timesheet.machine );
+        self.machine( STIBO.Timesheet.Configuration.machines.getMachine( timesheet.location, timesheet.machine) );
+        //self.machine( timesheet.machine );
         self.shift( timesheet.shift );
         self.hasLeadPressSupplement( timesheet.hasLeadPressSupplement );
         self.comment( timesheet.comment );
@@ -480,7 +561,7 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     }
 
     function reset() {
-
+        app.debug( 'timesheetViewModel.reset()' );
         self.employee = null;
         self.timesheet = null;
         self.shift( null );
@@ -492,7 +573,8 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     }
 
     //$.Topic( 'notification.user.loggedin' ).subscribe( function ( user ) { self.user( user ); } );
-    $.Topic( 'notification.timesheet.loaded' ).subscribe( view );
+    $.Topic( 'notification.timesheet.loaded' ).subscribe( function ( employee, timesheet ) { app.debug( "subscriber - notification.timesheet.loaded " ); view( employee, timesheet ); } );
+    //$.Topic( 'notification.timesheet.loaded' ).subscribe( view );
     $.Topic( 'notification.timesheetoverview.canselect' ).subscribe( subscriberCanCloseCurrent );
     $.Topic( 'notification.timesheet.saved' ).subscribe( reset );
     $.Topic( 'notification.user.canlogout' ).subscribe( subscriberCanCloseCurrent );

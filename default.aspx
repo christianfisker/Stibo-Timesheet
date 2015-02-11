@@ -168,6 +168,7 @@
                             <th>I alt</th>
                         </tr>
                     </thead>
+                    <script type="text/html">
                     <tfoot>
                         <tr>
                             <td></td>
@@ -181,7 +182,9 @@
                             <td style="text-align: right; font-weight: bold" data-bind="text: total, style: { backgroundColor: getTotalBackgroundColor }"></td>
                         </tr>
                     </tfoot>
+                    </script>
                     <tbody id="_navigationkeys" data-bind="foreach: lines, visible: isOpen">
+                        <!-- ko if ( getLineView() === 'hours' ) -->
                         <tr class="right">
                             <td style="text-align: left;" data-bind="text: description"></td>
                             <td>
@@ -200,8 +203,33 @@
                                 <input type="text" data-bind="hourValue: saturday, attr: { 'data-row': $index(), 'data-column': 6 }" /></td>
                             <td style="text-align: right;" data-bind="text: totalForLine"></td>
                         </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type === 'SUM-HOURS' ) -->
+                        <tr>
+                            <td colspan="8"></td>
+                            <td style="text-align: right; font-weight: bold" data-bind="text: $root.totalHours, style: { backgroundColor: $root.getTotalBackgroundColor }"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type.lastIndexOf('HEADER', 0) === 0) -->
+                        <tr>
+                            <td colspan="9" data-bind="text: description" style="font-weight: bold;"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type === 'SUM-MARKUP1' ) -->
+                        <tr>
+                            <td colspan="8"></td>
+                            <td style="text-align: right; font-weight: bold" data-bind="text: $root.totalSupplement1Hours">Markup1</td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type === 'SUM-MARKUP2' ) -->
+                        <tr>
+                            <td colspan="8"></td>
+                            <td style="text-align: right; font-weight: bold" data-bind="text: $root.totalSupplement2Hours">Markup2</td>
+                        </tr>
+                        <!-- /ko -->
                     </tbody>
                     <tbody data-bind="foreach: lines, visible: isClosed">
+                        <!-- ko if ( getLineView() === 'hours' ) -->
                         <tr class="right">
                             <td style="text-align: left;" data-bind="text: description"></td>
                             <td class="display" data-bind="text: sunday"></td>
@@ -213,6 +241,30 @@
                             <td class="display" data-bind="text: saturday"></td>
                             <td style="text-align: right;" data-bind="text: totalForLine"></td>
                         </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type === 'SUM-HOURS' ) -->
+                        <tr>
+                            <td colspan="8"></td>
+                            <td style="text-align: right; font-weight: bold" data-bind="text: $root.totalHours, style: { backgroundColor: $root.getTotalBackgroundColor }"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type.lastIndexOf('HEADER', 0) === 0) -->
+                        <tr>
+                            <td colspan="9" data-bind="text: description" style="font-weight: bold;"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type === 'SUM-MARKUP1' ) -->
+                        <tr>
+                            <td colspan="8"></td>
+                            <td style="text-align: right; font-weight: bold" data-bind="text: $root.totalSupplement1Hours">Markup1</td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if (type === 'SUM-MARKUP2' ) -->
+                        <tr>
+                            <td colspan="8"></td>
+                            <td style="text-align: right; font-weight: bold" data-bind="text: $root.totalSupplement2Hours">Markup2</td>
+                        </tr>
+                        <!-- /ko -->
                     </tbody>
                 </table>
 
@@ -220,6 +272,8 @@
 
             <!-- RIGHT COLUMN -->
             <div class="col-md-4">
+
+                
 
                 <!-- Valg af maskine -->
                 <table class="table table-condensed table-bordered">
@@ -234,13 +288,42 @@
                         <tr>
                             <!-- ko foreach: machines -->
                             <td style="text-align: center">
-                                <input type="radio" name="machineGroup" data-bind="value: id, checked: $root.machine, enable: $root.isOpen" /></td>
+                                <input type="radio" name="machineGroup" data-bind="value: id, checked: $root.machine, checkedValue: $data, enable: $root.isOpen" /></td>
+                            <!-- /ko -->
+                        </tr>
+                    </tbody>
+                </table>
+                <script type="text/html">
+                    <input type="radio" name="machineGroup" data-bind="value: id, checked: $root.machine, enable: $root.isOpen" /></td>
+                </script>
+
+                <!-- Valg af skift -->
+                <table class="table table-condensed table-bordered">
+                    <thead></thead>
+                    <tfoot></tfoot>
+                    <tbody>
+                        <tr class="header">
+                            <!-- ko foreach: teamShifts -->
+                            <td style="text-align: center" data-bind="text: title, click: $root.selectShift"></td>
+                            <!-- /ko -->
+                        </tr>
+                        <tr class="subheader">
+                            <!-- ko foreach: teamShifts -->
+                            <td style="text-align: center" data-bind="text: hours, click: $root.selectShift"></td>
+                            <!-- /ko -->
+                        </tr>
+                        <tr>
+                            <!-- ko foreach: teamShifts -->
+                            <td style="text-align: center">
+                                <input type="radio" name="shiftGroup" data-bind="value: id, checked: $root.shift, enable: $root.isOpen" /></td>
                             <!-- /ko -->
                         </tr>
                     </tbody>
                 </table>
 
-                <!-- Valg af skift -->
+
+                <!-- Valg af skift - UDKOMMENTERET -->
+                <script type="text/html">
                 <table class="table table-condensed table-bordered">
                     <thead></thead>
                     <tfoot></tfoot>
@@ -263,6 +346,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </script>
 
                 <!-- Ekstra information -->
                 <table class="table table-condensed" style="text-align: right;" data-bind="visible: isOpen">
@@ -306,12 +390,14 @@
                     </script>
                 </table>
                 <form role="form">
+                    <!-- ko if ( location() !== 'Bogbind' ) -->
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" data-bind="checked: hasLeadPressSupplement, enable: isOpen">
                             Førertrykkertillæg
                         </label>
                     </div>
+                    <!-- /ko -->
                     <div class="form-group">
                         <label for="exampleInputEmail1">Kommentarer og meddelelser</label>
                         <textarea id="Textarea1" class="form-control" rows="3" data-bind="value: comment, enable: isOpen"></textarea>

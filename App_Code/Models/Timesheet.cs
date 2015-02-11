@@ -22,6 +22,8 @@ namespace Stibo.Timesheet.Models
         public string Shift { get; set; }
         public string Comment { get; set; }
         public bool HasLeadPressSupplement { get; set; }
+        public float Supplement1Hours { get; set; }
+        public float Supplement2Hours { get; set; }
         public string State { get; set; }
         public string Version { get; set; }
         public DateTime ModifiedDate { get; set; }

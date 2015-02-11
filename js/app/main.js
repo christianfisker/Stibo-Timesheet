@@ -24,7 +24,7 @@ STIBO.Timesheet.Application = function ( $settings, configuration ) {
 
     self.debug = function ( message ) {
         if ( $settings.debugActive === true ) {
-            if ( _.isString( message ) )
+            if ( typeof message === 'string' )
                 console.log( message );
             else
                 console.dir( message );
@@ -46,7 +46,6 @@ STIBO.Timesheet.Application = function ( $settings, configuration ) {
 };
 
 
-
 $( function () {
 
     var root = STIBO.Timesheet,
@@ -65,8 +64,8 @@ $( function () {
     app.timesheetViewModel = new root.TimesheetViewModel( app );
     app.timesheetViewModel.bind( document.getElementById( 'TimesheetView' ) );
 
-
 } );
+
 
 ( function () {
     toastr.options = {
