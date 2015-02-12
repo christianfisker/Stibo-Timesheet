@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ugeseddel - Stibo</title>
+    <title>Ugeseddel - ColorPrint</title>
 
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
@@ -27,12 +27,12 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Stibo Ugeseddel</a>
+                <a class="navbar-brand" href="#">ColorPrint Ugeseddel</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div>
                 <ul class="nav navbar-nav">
-                    <li><a href="defaultcpv.aspx">Gå til ColorPrint ugeseddel</a></li>
+                    <li><a href="default.aspx">Gå til Stibo ugeseddel</a></li>
                 </ul>
 
                 <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#modal-timesheet-help">Vejledning</button>
@@ -157,18 +157,18 @@
 
             <div class="col-md-8">
 
-                <!-- Ugeseddel linjer -->
+                <!-- Ugeseddel linjer - FORKEL MELLEM SGT OG CPV - PLACERING AF SØNDAG -->
                 <table class="table table-condensed stibo-timesheet-lines">
                     <thead>
                         <tr class="right">
                             <th></th>
-                            <th>S&oslash;ndag</th>
                             <th>Mandag</th>
                             <th>Tirsdag</th>
                             <th>Onsdag</th>
                             <th>Torsdag</th>
                             <th>Fredag</th>
                             <th>L&oslash;rdag</th>
+                            <th>S&oslash;ndag</th>
                             <th>I alt</th>
                         </tr>
                     </thead>
@@ -192,19 +192,19 @@
                         <tr class="right">
                             <td style="text-align: left;" data-bind="text: description"></td>
                             <td>
-                                <input type="text" data-bind="hourValue: sunday, attr: {'data-row': $index(), 'data-column': 0}" /></td>
+                                <input type="text" data-bind="hourValue: monday, attr: { 'data-row': $index(), 'data-column': 0 }" /></td>
                             <td>
-                                <input type="text" data-bind="hourValue: monday, attr: { 'data-row': $index(), 'data-column': 1 }" /></td>
+                                <input type="text" data-bind="hourValue: tuesday, attr: { 'data-row': $index(), 'data-column': 1 }" /></td>
                             <td>
-                                <input type="text" data-bind="hourValue: tuesday, attr: { 'data-row': $index(), 'data-column': 2 }" /></td>
+                                <input type="text" data-bind="hourValue: wednesday, attr: { 'data-row': $index(), 'data-column': 2 }" /></td>
                             <td>
-                                <input type="text" data-bind="hourValue: wednesday, attr: { 'data-row': $index(), 'data-column': 3 }" /></td>
+                                <input type="text" data-bind="hourValue: thursday, attr: { 'data-row': $index(), 'data-column': 3 }" /></td>
                             <td>
-                                <input type="text" data-bind="hourValue: thursday, attr: { 'data-row': $index(), 'data-column': 4 }" /></td>
+                                <input type="text" data-bind="hourValue: friday, attr: { 'data-row': $index(), 'data-column': 4 }" /></td>
                             <td>
-                                <input type="text" data-bind="hourValue: friday, attr: { 'data-row': $index(), 'data-column': 5 }" /></td>
+                                <input type="text" data-bind="hourValue: saturday, attr: { 'data-row': $index(), 'data-column': 5 }" /></td>
                             <td>
-                                <input type="text" data-bind="hourValue: saturday, attr: { 'data-row': $index(), 'data-column': 6 }" /></td>
+                                <input type="text" data-bind="hourValue: sunday, attr: { 'data-row': $index(), 'data-column': 6 }" /></td>
                             <td style="text-align: right;" data-bind="text: totalForLine"></td>
                         </tr>
                         <!-- /ko -->
@@ -236,13 +236,13 @@
                         <!-- ko if ( getLineView() === 'hours' ) -->
                         <tr class="right">
                             <td style="text-align: left;" data-bind="text: description"></td>
-                            <td class="display" data-bind="text: sunday"></td>
                             <td class="display" data-bind="text: monday"></td>
                             <td class="display" data-bind="text: tuesday"></td>
                             <td class="display" data-bind="text: wednesday"></td>
                             <td class="display" data-bind="text: thursday"></td>
                             <td class="display" data-bind="text: friday"></td>
                             <td class="display" data-bind="text: saturday"></td>
+                            <td class="display" data-bind="text: sunday"></td>
                             <td style="text-align: right;" data-bind="text: totalForLine"></td>
                         </tr>
                         <!-- /ko -->
@@ -277,7 +277,6 @@
             <!-- RIGHT COLUMN -->
             <div class="col-md-4">
 
-                
 
                 <!-- Valg af maskine -->
                 <table class="table table-condensed table-bordered">
@@ -297,9 +296,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <script type="text/html">
-                    <input type="radio" name="machineGroup" data-bind="value: id, checked: $root.machine, enable: $root.isOpen" /></td>
-                </script>
 
                 <!-- Valg af skift -->
                 <table class="table table-condensed table-bordered">
@@ -325,32 +321,6 @@
                     </tbody>
                 </table>
 
-
-                <!-- Valg af skift - UDKOMMENTERET -->
-                <script type="text/html">
-                <table class="table table-condensed table-bordered">
-                    <thead></thead>
-                    <tfoot></tfoot>
-                    <tbody>
-                        <tr class="header">
-                            <!-- ko foreach: shifts -->
-                            <td style="text-align: center" data-bind="text: title, click: $root.selectShift"></td>
-                            <!-- /ko -->
-                        </tr>
-                        <tr class="subheader">
-                            <!-- ko foreach: shifts -->
-                            <td style="text-align: center" data-bind="text: hours, click: $root.selectShift"></td>
-                            <!-- /ko -->
-                        </tr>
-                        <tr>
-                            <!-- ko foreach: shifts -->
-                            <td style="text-align: center">
-                                <input type="radio" name="shiftGroup" data-bind="value: id, checked: $root.shift, enable: $root.isOpen" /></td>
-                            <!-- /ko -->
-                        </tr>
-                    </tbody>
-                </table>
-                </script>
 
                 <!-- Ekstra information -->
                 <table class="table table-condensed" style="text-align: right;" data-bind="visible: isOpen">
@@ -397,8 +367,26 @@
                     <!-- ko if ( location() !== 'Bogbind' ) -->
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" data-bind="checked: hasLeadPressSupplement, enable: isOpen">
-                            Førertrykkertillæg
+                            <input type="checkbox" data-bind="checked: treForlaegning, enable: isOpen">
+                            3 forlægning
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" data-bind="checked: fireForlaegning, enable: isOpen">
+                            4 forlægning
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" data-bind="checked: femForlaegning, enable: isOpen">
+                            5 forlægning
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" data-bind="checked: raadighedsvagt, enable: isOpen">
+                            Rådighedsvagt
                         </label>
                     </div>
                     <!-- /ko -->
@@ -439,7 +427,7 @@
     <!-- References to custom JavaScript -->
     <script src="js/utils/columbus.jquery.pubsub.js?v=20140926"></script>
     <script src="js/app/utils.js"></script>
-    <script src="js/app/configuration-sgt.js"></script>
+    <script src="js/app/configuration-cpv.js"></script>
     <script src="js/app/dataservice.js?v=20150212"></script>
     <script src="js/app/models.js?v=20150212"></script>
     <script src="js/app/userviewmodel.js?v=20150212"></script>

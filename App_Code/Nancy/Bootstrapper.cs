@@ -6,6 +6,7 @@ using Nancy.Responses;
 using Nancy.Responses.Negotiation;
 using Nancy.TinyIoc;
 using Nancy.Json;
+using Nancy.Session;
 
 namespace Stibo.Timesheet.Nancy
 {
@@ -19,6 +20,8 @@ namespace Stibo.Timesheet.Nancy
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
         {
+            //CookieBasedSessions.Enable(pipelines); // 20150212 - no good here because FormsAuthentication comes in before this happens... 
+
             base.ApplicationStartup(container, pipelines);
 
             pipelines.OnError += HandleExceptions;
@@ -53,6 +56,8 @@ namespace Stibo.Timesheet.Nancy
                 };
 
             FormsAuthentication.Enable(pipelines, formsAuthConfiguration);
+            
+            CookieBasedSessions.Enable(pipelines); // 20150212 - Moved here so that session is initialized BEFORE formsauthentication.. or RequiresAuthentication() fails with 'Session on enabled'!
         }
 
         private static Response HandleExceptions(NancyContext ctx, Exception ex)

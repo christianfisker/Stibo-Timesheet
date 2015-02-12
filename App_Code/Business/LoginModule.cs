@@ -11,6 +11,7 @@ namespace Stibo.Timesheet.Business
     {
         public string Username { get; set; }
         public string Password { get; set; }
+        public string CompanyCode { get; set; } // 20150212 cfi/columbus
     }
 
     /// <summary>

@@ -28,14 +28,21 @@ namespace Stibo.Timesheet.Nancy
 
             Get["/config"] = x =>
             {
-                return new ClientSettings(DateTime.Now);
+                // 20150212 cfi/columbus
+                return false;
+                //return new ClientSettings(DateTime.Now);
                 //return Configuration.ClientSettings;
             };
 
             Post["/login"] = x =>
             {
                 var login = this.Bind<LoginCredentials>();
-                var userGuid = UserMapper.ValidateUser(login.Username, login.Password);
+
+                Request.Session["CompanyCode"] = login.CompanyCode;
+                //Request.Cookies["CompanyCode"] = login.CompanyCode;
+                //HttpContext.Current.Session["CompanyCode"] = login.CompanyCode;
+
+                var userGuid = UserMapper.ValidateUser(login.Username, login.Password, login.CompanyCode);
 
                 if (userGuid == null)
                 {
@@ -82,7 +89,7 @@ namespace Stibo.Timesheet.Nancy
 
                     if (user.HasEmployeeAccess(parameters.id))
                     {
-                        using (var dc = new DataContext())
+                        using (var dc = new DataContext(user.CompanyCode))
                         {
                             return dc.GetEmployee(parameters.id);
                         }

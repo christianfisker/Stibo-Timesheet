@@ -82,7 +82,7 @@ namespace Stibo.Timesheet.Business
         public TimesheetOverview(IUser user, DateTime date, int weeksBefore, int weeksAfter)
         {
             _user = user;
-            _weekRange = new WeekRange(date, weeksBefore, weeksAfter);
+            _weekRange = new WeekRange(date, weeksBefore, weeksAfter, user.CompanyCode);
             //_settings = new ClientSettings(date, weeksBefore, weeksAfter);
         }
 
@@ -100,7 +100,7 @@ namespace Stibo.Timesheet.Business
 
             // Get visible employees and timesheet data for the week range.
 
-            using (var dc = new DataContext())
+            using (var dc = new DataContext(_user.CompanyCode))
             {
                 employees = GetEmployees(dc, _user);
 
@@ -144,18 +144,38 @@ namespace Stibo.Timesheet.Business
         {
             IEnumerable<Employee> employees = null;
 
-            if (user.Role == UserRole.Employee)
+            // >> 20150211 cfi/columbus
+            if (user.Role == UserRole.Payroll)
             {
-                // get only current employee
+                // Get all employees.
+                employees = dc.GetEmployees();
+            }
+            else if (user.Role == UserRole.Approver)
+            {
+                // Get employees that belong to the aprovers ApproverGroup.
+                employees = dc.GetEmployees(user.ApproverGroup);
+            }
+            else
+            {
+                // Get only current employee.
                 var employee = dc.GetEmployeeForUser(user.Id);
                 if (employee != null)
                     employees = new List<Employee> { employee };
             }
-            else if (user.Role == UserRole.Approver || user.Role == UserRole.Payroll)
-            {
-                // get all employees
-                employees = dc.GetEmployees();
-            }
+
+            //if (user.Role == UserRole.Employee)
+            //{
+            //    // get only current employee
+            //    var employee = dc.GetEmployeeForUser(user.Id);
+            //    if (employee != null)
+            //        employees = new List<Employee> { employee };
+            //}
+            //else if (user.Role == UserRole.Approver || user.Role == UserRole.Payroll)
+            //{
+            //    // get all employees
+            //    employees = dc.GetEmployees();
+            //}
+            // << 20150211 cfi/columbus
 
             return employees;
         }

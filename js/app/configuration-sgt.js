@@ -3,10 +3,20 @@
 STIBO.Timesheet = STIBO.Timesheet || {};
 STIBO.Timesheet.Configuration = STIBO.Timesheet.Configuration || {};
 
-STIBO.Timesheet.Settings = {
-    debugActive: true,              // REMEMBER - Set to false when LIVE
-    autoSelectCurrentWeek: false    // not in use
-};
+//STIBO.Timesheet.Settings = {
+
+//    companyCode: 'SGT',     // 20150211 cfi/columbus - Separation between SGT and CPV
+//    hoursOnTimesheet: 0,    // 20150211 cfi/columbus - CPV timesheets start with 74 hours and subtract entered hours!
+
+//    debugActive: true,              // REMEMBER - Set to false when LIVE
+//    autoSelectCurrentWeek: false,   // not in use
+//    dummy: null
+//};
+
+STIBO.Timesheet.Configuration.debugActive = true;
+
+STIBO.Timesheet.Configuration.companyCode = 'SGT';
+STIBO.Timesheet.Configuration.initialHoursOnTimesheet = 0;
 
 // not in use
 STIBO.Timesheet.Configuration.states = {
@@ -17,6 +27,7 @@ STIBO.Timesheet.Configuration.states = {
     'APPROVEDTENTATIVE': {},
     'CLOSED': {}
 };
+
 
 STIBO.Timesheet.Configuration.machines = {
     locations: {
@@ -37,11 +48,11 @@ STIBO.Timesheet.Configuration.machines = {
             { id: '3HP', name: '3-hold Planskærer (108t)', teamId: '3HP' }
         ]
     },
-    getLocation: function ( location ) {
+    getLocation: function (location) {
         return this.locations[location];
     },
-    getMachine: function ( location, id ) {
-        return STIBO.utils.find( this.locations[location], 'id', id );
+    getMachine: function (location, id) {
+        return STIBO.utils.find(this.locations[location], 'id', id);
     }
 };
 
@@ -64,6 +75,8 @@ STIBO.Timesheet.Configuration.shifts = {
 
             { id: 'DAG37', title: 'Dag hold', hours: 37, factor: 1.00, teamId: 'FT' },
             { id: 'WE24', title: 'Week end', hours: 24, factor: 1.55, teamId: 'FT' },
+            { id: 'WE1-31', title: 'Week end 1', hours: 31, factor: 1.19, teamId: 'FT' },
+            { id: 'WE2-31', title: 'Week end 2', hours: 31, factor: 1.19, teamId: 'FT' },
 
             { id: 'DAG38', title: 'Dag hold', hours: 38, factor: 0.93, teamId: 'TA' },
             { id: 'AFTEN38', title: 'Aften hold', hours: 38, factor: 1.09, teamId: 'TA' },
@@ -76,23 +89,21 @@ STIBO.Timesheet.Configuration.shifts = {
             { id: 'NAT34', title: 'Nat hold', hours: 34, factor: 1.09, teamId: '3H' },
 
             { id: 'WE1-29', title: 'Week end 1', hours: 29, factor: 1.28, teamId: '4H' },
-            { id: 'WE1-31', title: 'Week end 1', hours: 31, factor: 1.19, teamId: '4H' },
             { id: 'DAG40', title: 'Dag hold', hours: 40, factor: 0.93, teamId: '4H' },
             { id: 'DAG36', title: 'Dag hold', hours: 36, factor: 1.03, teamId: '4H' },
             { id: 'AFTEN34', title: 'Aften hold', hours: 34, factor: 1.09, teamId: '4H' },
             { id: 'WE2-29', title: 'Week end 2', hours: 29, factor: 1.28, teamId: '4H' },
-            { id: 'WE2-31', title: 'Week end 2', hours: 31, factor: 1.19, teamId: '4H' },
 
             { id: 'DAG39', title: 'Dag hold', hours: 39, factor: 0.93, teamId: '3HP' },
             { id: 'AFTEN35', title: 'Aften hold', hours: 35, factor: 1.09, teamId: '3HP' },
             { id: 'NAT34', title: 'Nat hold', hours: 34, factor: 1.09, teamId: '3HP' }
         ]
     },
-    getLocation: function ( location ) {
+    getLocation: function (location) {
         return this.locations[location];
     },
-    getShift: function ( location, id ) {
-        return STIBO.utils.find( this.locations[location], 'id', id );
+    getShift: function (location, id) {
+        return STIBO.utils.find(this.locations[location], 'id', id);
     }
 };
 
@@ -131,9 +142,9 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'H', lineView: 'hours', sumGroup: 'hours', description: 'Feriefri - antal timer' },
             { type: 'I', lineView: 'hours', sumGroup: 'hours', description: 'Soen-/helligdage - antal timer' },
             { type: 'L', lineView: 'hours', sumGroup: 'hours', description: 'Aflyst arbejde - firmabetalte timer tastes i "Timer på arbejde"' },
-            { type: 'M', lineView: 'hours', sumGroup: 'hours', description: 'Betalt pause ved arbejde over 2 timer = 0,25 time per dag' },
+            { type: 'M', lineView: 'hours', sumGroup: 'hours', description: 'Betalt pause ved arbejde over 2 timer = 0,25 time per dag', sumNegative: true },
             { type: 'SUM-HOURS', lineView: 'sum', sumGroup: 'hours', includeInGroupSum: false, saveToDatabase: false },
-            
+
             { type: 'HEADER1', description: 'Maskinfører tillæg (skriv antal timer)', saveToDatabase: false },
             { type: 'X1', lineView: 'hours', sumGroup: 'supplement1', description: 'Binder' },
             { type: 'X2', lineView: 'hours', sumGroup: 'supplement1', description: 'Trekniv' },
@@ -149,13 +160,15 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'SUM-MARKUP2', lineView: 'sum', sumGroup: 'supplement2', includeInGroupSum: false, saveToDatabase: false }
         ]
     },
-    getLocation: function ( location ) {
+    getLocation: function (location) {
         return this.locations[location];
     },
-    getLine: function ( location, type ) {
-        return STIBO.utils.find( this.locations[location], 'type', type );
+    getLine: function (location, type) {
+        return STIBO.utils.find(this.locations[location], 'type', type);
     }
 };
+
+
 
 // Dette er der altså ikke tid til!! Brug det der er!
 //STIBO.Timesheet.Configuration.locations = {
@@ -167,47 +180,3 @@ STIBO.Timesheet.Configuration.lines = {
 //    'ARK': {}
 //}
 
-
-
-STIBO.utils = STIBO.utils || {};
-
-// Find an object in an array by comparing a specified field with a value. Returns null if not found.
-STIBO.utils.find = function ( arCollection, sField, aValue ) {
-    var result = _.find(
-        arCollection,
-        function ( element ) {
-            return element[sField] === aValue;
-        }
-    );
-
-    return typeof result === 'undefined' ? null : result;
-}
-
-// Return null (or defaultvalue) if the value is undefined. Else returns the value.
-STIBO.utils.default = function ( value, defaultValue ) {
-    return _.isUndefined( value ) ?
-        ( _.isUndefined( defaultValue ) ? null : defaultValue ) :
-        value;
-};
-
-// Takes output from a parseFloat() function  and checks/converts...
-STIBO.utils.toNumber = function ( value, decimals, round ) {
-
-    if ( _.isNaN || !_.isNumber( value ) )
-        return 0.00;
-
-    return value.toFixed( 2 );
-};
-
-STIBO.utils.numberToHours = function ( number, showZero ) {
-    var hours = isNaN( number ) ? 0 : parseFloat( number );
-    if ( hours === 0 && showZero !== true )
-        return '';
-    return hours.toFixed( 2 );
-};
-
-STIBO.utils.hoursToNumber = function ( hours ) {
-    var output = parseFloat( hours );
-    output = isNaN( output ) ? 0 : output;
-    return output;
-};

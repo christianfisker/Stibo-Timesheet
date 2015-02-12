@@ -11,7 +11,7 @@ var STIBO = window.STIBO || {};
 STIBO.Timesheet = STIBO.Timesheet || {};
 
 
-STIBO.Timesheet.Application = function ( $settings, configuration ) {
+STIBO.Timesheet.Application = function ( configuration ) {
     var self = this;
 
     self.user = null;
@@ -23,7 +23,7 @@ STIBO.Timesheet.Application = function ( $settings, configuration ) {
     //};
 
     self.debug = function ( message ) {
-        if ( $settings.debugActive === true ) {
+        if ( configuration.debugActive === true ) {
             if ( typeof message === 'string' )
                 console.log( message );
             else
@@ -49,7 +49,7 @@ STIBO.Timesheet.Application = function ( $settings, configuration ) {
 $( function () {
 
     var root = STIBO.Timesheet,
-        app = new root.Application(root.Settings, root.Configuration),
+        app = new root.Application( root.Configuration ),
         dispatcher = new root.Dispatcher( app );
 
     app.loginViewModel = new root.LoginViewModel( app );

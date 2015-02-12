@@ -82,7 +82,7 @@ namespace Stibo.Timesheet.Business
         {
             Models.Timesheet timesheet = null;
 
-            using (var dc = new DataContext())
+            using (var dc = new DataContext(_user.CompanyCode))
             {
                 timesheet = dc.GetTimesheetHeader(id);
                 if (timesheet != null)
@@ -135,7 +135,7 @@ namespace Stibo.Timesheet.Business
                 //};
             }
 
-            using (var dc = new DataContext())
+            using (var dc = new DataContext(_user.CompanyCode))
             {
                 timesheet = dc.GetTimesheetHeader(employeeId, weekNum, role);
                 if (timesheet != null)
@@ -172,7 +172,7 @@ namespace Stibo.Timesheet.Business
             {
                 // INSERT RECORD
 
-                using (var dc = new DataContext(true))
+                using (var dc = new DataContext(_user.CompanyCode, true))
                 {
                     // Has a record for this employee/week been inserted already?
                     var existingTimesheet = dc.GetTimesheet(timesheet.EmployeeId, timesheet.Week);
@@ -204,7 +204,7 @@ namespace Stibo.Timesheet.Business
             {
                 // UPDATE RECORD
 
-                using (var dc = new DataContext(true))
+                using (var dc = new DataContext(_user.CompanyCode, true))
                 {
                     //Get database version of timesheet for comparison.
                     var existingTimesheet = dc.GetTimesheet(timesheet.EmployeeId, timesheet.Week);

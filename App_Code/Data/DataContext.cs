@@ -7,6 +7,10 @@ using System.Linq;
 using Stibo.Timesheet.Models;
 
 using Dapper;
+using System.Configuration;
+using System.Web;
+using Nancy.Session;
+using Nancy;
 
 namespace Stibo.Timesheet.Data
 {
@@ -19,14 +23,23 @@ namespace Stibo.Timesheet.Data
         IDbTransaction _transaction = null;
         bool _useTransaction = false;
 
-        public DataContext()
+        private DataContext()
         {
         }
 
-        public DataContext(bool useTransaction)
+        public DataContext(string companyCode)
+        {
+            // 20150212 cfi/columbus
+            ConnectionString = Configuration.ConnectionStrings[companyCode];
+        }
+
+        public DataContext(string companyCode, bool useTransaction)
+            : this(companyCode)
         {
             _useTransaction = useTransaction;
         }
+
+        public string ConnectionString { get; set; } // 20150212 cfi/columbus
 
         public User GetUserByUid(Guid loginId)
         {
@@ -86,6 +99,24 @@ namespace Stibo.Timesheet.Data
             //return Connection.Query<Employee>("select * from Employees");
         }
 
+        /// <summary>
+        /// Return all employees that belong to a Location that matches the passed in ApproverGroup.
+        /// Used to get employees that are visible to an approver.
+        /// 20150211 cfi/columbus
+        /// </summary>
+        /// <param name="approverGroup"></param>
+        /// <returns></returns>
+        public IEnumerable<Employee> GetEmployees(string approverGroup)
+        {
+            string sql = @"select em.*,us.Username from Employees em
+                join Users as us on us.Id = em.UserId
+                where em.Location = @approverGroup
+                order by us.username";
+
+            return Connection.Query<Employee>(sql, new { approverGroup = approverGroup });
+        }
+
+
         public IEnumerable<Models.Timesheet> GetTimesheetsForEmployee(string emplId, string startWeek, string endWeek)
         {
             return Connection.Query<Models.Timesheet>("SELECT * FROM Timesheets WHERE EmployeeId = @emplId AND Week between @startWeek AND @endWeek AND IsHistory = 0 ORDER BY Week", new { emplId = emplId, startWeek = startWeek, endWeek = endWeek });
@@ -105,10 +136,11 @@ namespace Stibo.Timesheet.Data
             return Connection.Query<Models.Timesheet, TimesheetLine, Models.Timesheet>
             (
                 sql,
-                (timesheet, timesheetLine) => {
+                (timesheet, timesheetLine) =>
+                {
                     timesheet.Lines.Add(timesheetLine);
-                    return timesheet; 
-                }, 
+                    return timesheet;
+                },
                 new { id = id })
             .SingleOrDefault();
         }
@@ -130,7 +162,8 @@ namespace Stibo.Timesheet.Data
             var result = Connection.Query<Models.Timesheet, TimesheetLine, Models.Timesheet>
             (
                 sql,
-                (timesheet, timesheetLine) => {
+                (timesheet, timesheetLine) =>
+                {
                     if (ret == null)
                     {
                         ret = timesheet;
@@ -141,7 +174,7 @@ namespace Stibo.Timesheet.Data
                     ret.Lines.Add(timesheetLine);
                     return null;// ret;
                 },
-                new { employeeId = employeeId, week = week }, 
+                new { employeeId = employeeId, week = week },
                 Transaction
             );
 
@@ -173,7 +206,7 @@ namespace Stibo.Timesheet.Data
                 LEFT JOIN Users ON Users.Id = ts.ModifiedBy
                 WHERE ts.Id = @id AND isHistory = 0";
 
-            return Connection.Query<Models.Timesheet>( sqlStatement, new { id = id }).FirstOrDefault();
+            return Connection.Query<Models.Timesheet>(sqlStatement, new { id = id }).FirstOrDefault();
         }
 
         public Models.Timesheet GetTimesheetHeader(string employeeId, string weekNum, UserRole role)
@@ -210,7 +243,11 @@ namespace Stibo.Timesheet.Data
                     State,
                     ModifiedDate,
                     ModifiedBy,
-                    ModifiedRole
+                    ModifiedRole,
+                    TreForlaegning,
+                    FireForlaegning,
+                    FemForlaegning,
+                    Raadighedsvagt
                 )
                 OUTPUT Inserted.Id
                 VALUES(
@@ -226,7 +263,11 @@ namespace Stibo.Timesheet.Data
                     @State,
                     @ModifiedDate,
                     @ModifiedBy,
-                    @ModifiedRole
+                    @ModifiedRole,
+                    @TreForlaegning,
+                    @FireForlaegning,
+                    @FemForlaegning,
+                    @Raadighedsvagt
                 )";
 
             var row = Connection.Query(
@@ -299,7 +340,12 @@ namespace Stibo.Timesheet.Data
                     ModifiedDate = @ModifiedDate,
                     ModifiedBy = @ModifiedBy,
                     ModifiedRole = @ModifiedRole,
-                    IsHistory = @IsHistory
+                    IsHistory = @IsHistory,
+                    TreForlaegning = @TreForlaegning,
+                    FireForlaegning = @FireForlaegning,
+                    FemForlaegning = @FemForlaegning,
+                    Raadighedsvagt = @Raadighedsvagt
+
                 WHERE
                     Id = @Id
                 ";
@@ -395,7 +441,10 @@ namespace Stibo.Timesheet.Data
             {
                 if (_connection == null)
                 {
-                    _connection = new SqlConnection(Configuration.ConnectionString);
+                    // 20150212 cfi/columbus
+                    _connection = new SqlConnection(ConnectionString);
+                    //_connection = new SqlConnection(Configuration.ConnectionString);
+
                     _connection.Open();
 
                     if (_useTransaction)

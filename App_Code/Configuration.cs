@@ -9,18 +9,29 @@ namespace Stibo.Timesheet
 {
     public static class Configuration
     {
+        //public enum Company
+        //{
+        //    SGT,
+        //    CPV
+        //}
+
         private static bool isCreated = false;
         private static object synclock = new object();
 
         #region Web.config
 
-        public static string ConnectionString { get; private set; }
+        //public static string CompanyCode { get; private set; } // 20150211 cfi/columbus
+        //public static Company Company { get; private set; }
+        //public static string ConnectionString { get; private set; }
         public static int WeeksBeforeCurrent { get; private set; }
         public static int WeeksAfterCurrent { get; private set; }
 
+        // 20150212 cfi/columbus
+        public static Dictionary<string, string> ConnectionStrings = new Dictionary<string, string>(2);
+
         #endregion
 
-        public static ClientSettings ClientSettings { get; private set; }
+        //public static ClientSettings ClientSettings { get; private set; }
 
         internal static void Create()
         {
@@ -40,46 +51,57 @@ namespace Stibo.Timesheet
         static void Initialize()
         {
             // Web.config settings
-            ConnectionString = ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["currentConnectionStringName"]].ConnectionString;
+
+            //>> 20150222 cfi 
+            //CompanyCode = ConfigurationManager.AppSettings["CompanyCode"];
+            //string connectionStringName = ConfigurationManager.AppSettings["CurrentConnectionStringPrefix"] + ":" + CompanyCode;
+            //ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+
+            string prefix = ConfigurationManager.AppSettings["CurrentConnectionStringPrefix"];
+            ConnectionStrings["SGT"] = ConfigurationManager.ConnectionStrings[prefix + ":SGT"].ConnectionString;
+            ConnectionStrings["CPV"] = ConfigurationManager.ConnectionStrings[prefix + ":CPV"].ConnectionString;
+
+            //ConnectionString = ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["currentConnectionStringName"]].ConnectionString;
+            //<< 20150222 cfi 
 
             WeeksBeforeCurrent = int.Parse(ConfigurationManager.AppSettings["numWeeksBeforeCurrent"]);
             WeeksAfterCurrent = int.Parse(ConfigurationManager.AppSettings["numWeeksAfterCurrent"]);
         }
     }
 
-    public class ClientSettings
-    {
-        Calendar calendar = DateTimeFormatInfo.CurrentInfo.Calendar;
+    //public class ClientSettings
+    //{
+    //    Calendar calendar = DateTimeFormatInfo.CurrentInfo.Calendar;
 
-        public ClientSettings()
-            : this(DateTime.Now)
-        {
-        }
+    //    public ClientSettings()
+    //        : this(DateTime.Now)
+    //    {
+    //    }
 
-        public ClientSettings(DateTime date)
-            : this(date, Configuration.WeeksBeforeCurrent, Configuration.WeeksAfterCurrent)
-        {
-        }
+    //    public ClientSettings(DateTime date)
+    //        : this(date, Configuration.WeeksBeforeCurrent, Configuration.WeeksAfterCurrent)
+    //    {
+    //    }
 
-        public ClientSettings(DateTime date, int weeksBefore, int weeksAfter)
-        {
-            //var currentWeek = calendar.GetWeekOfYear(date, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Sunday);
+    //    public ClientSettings(DateTime date, int weeksBefore, int weeksAfter)
+    //    {
+    //        //var currentWeek = calendar.GetWeekOfYear(date, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Sunday);
 
-            CurrentDate = date;
-            //StartDate = calendar.AddWeeks(now, -Configuration.WeeksBeforeCurrent );
-            //var endDate = calendar.AddWeeks(now, Configuration.WeeksAfterCurrent);
+    //        CurrentDate = date;
+    //        //StartDate = calendar.AddWeeks(now, -Configuration.WeeksBeforeCurrent );
+    //        //var endDate = calendar.AddWeeks(now, Configuration.WeeksAfterCurrent);
 
-            WeekRange range = new WeekRange(date, weeksBefore, weeksAfter);
-            CurrentWeek = range.CurrentWeek;
-            VisibleWeeks = range.WeeksAsStrings;
-        }
+    //        WeekRange range = new WeekRange(date, weeksBefore, weeksAfter);
+    //        CurrentWeek = range.CurrentWeek;
+    //        VisibleWeeks = range.WeeksAsStrings;
+    //    }
 
-        public DateTime CurrentDate { get; private set; }
-        public DateTime StartDate { get; private set; }
-        public DateTime EndDate { get; private set; }
-        public string CurrentWeek { get; private set; }
-        public string[] VisibleWeeks { get; private set; }
-    }
+    //    public DateTime CurrentDate { get; private set; }
+    //    public DateTime StartDate { get; private set; }
+    //    public DateTime EndDate { get; private set; }
+    //    public string CurrentWeek { get; private set; }
+    //    public string[] VisibleWeeks { get; private set; }
+    //}
 
 
     public interface IWeekRange
@@ -111,7 +133,7 @@ namespace Stibo.Timesheet
         /// <param name="now"></param>
         /// <param name="weeksBefore"></param>
         /// <param name="weeksAfter"></param>
-        public WeekRange(DateTime now, int weeksBefore, int weeksAfter)
+        public WeekRange(DateTime now, int weeksBefore, int weeksAfter, string companyCode)
         {
             Calendar calendar = DateTimeFormatInfo.CurrentInfo.Calendar;
 
@@ -121,11 +143,33 @@ namespace Stibo.Timesheet
             for (int weekOffset = -weeksBefore; weekOffset <= weeksAfter; weekOffset++)
             {
                 var date = calendar.AddWeeks(now, weekOffset);
-                _weeksAsStrings[weeksBefore + weekOffset] = string.Format(
-                    "{0}{1:d2}",
-                    GetStiboYear(date),
-                    GetStiboWeekOfYear(date)
-                );
+
+                //>> 20150211 cfi
+                //if (Configuration.CompanyCode == "SGT")
+                if (companyCode == "SGT")
+                {
+                    _weeksAsStrings[weeksBefore + weekOffset] = string.Format(
+                        "{0}{1:d2}",
+                        GetStiboYear(date),
+                        GetStiboWeekOfYear(date)
+                    );
+                }
+                else
+                {
+                    _weeksAsStrings[weeksBefore + weekOffset] = string.Format(
+                        "{0}{1:d2}",
+                        GetIso8601Year(date),
+                        GetIso8601WeekOfYear(date)
+                    );
+                }
+
+                //_weeksAsStrings[weeksBefore + weekOffset] = string.Format(
+                //    "{0}{1:d2}",
+                //    GetStiboYear(date),
+                //    GetStiboWeekOfYear(date)
+                //);
+                
+                //<< 20150211 cfi
 
                 if (weekOffset == 0)
                 {
@@ -169,6 +213,7 @@ namespace Stibo.Timesheet
         //
 
         private static Calendar calendar = CultureInfo.InvariantCulture.Calendar;
+
         public static int GetIso8601WeekOfYear(DateTime time)
         {
             // Seriously cheat.  If its Monday, Tuesday or Wednesday, then it'll 
@@ -182,6 +227,24 @@ namespace Stibo.Timesheet
 
             // Return the week of our adjusted day
             return calendar.GetWeekOfYear(time, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+
+        /// <summary>
+        /// 20150211 cfi/columbus
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static int GetIso8601Year(DateTime time)
+        {
+            DayOfWeek day = calendar.GetDayOfWeek(time);
+
+            if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+            {
+                time = time.AddDays(3);
+            }
+
+            // Return the year of the adjusted day.
+            return time.Year;
         }
 
         /// <summary>

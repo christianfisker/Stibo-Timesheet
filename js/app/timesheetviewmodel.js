@@ -54,7 +54,13 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     // changeable fields
     self.machine = ko.observable( null );
     self.shift = ko.observable( null );
-    self.hasLeadPressSupplement = ko.observable( false );
+    self.hasLeadPressSupplement = ko.observable(false);
+
+    self.treForlaegning = ko.observable(false); // 20150211
+    self.fireForlaegning = ko.observable(false); // 20150211
+    self.femForlaegning = ko.observable(false); // 20150211
+    self.raadighedsvagt = ko.observable(false); // 20150211
+
     self.comment = ko.observable( '' );
 
     self.state = ko.observable();
@@ -223,8 +229,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     self.totalHours = ko.pureComputed( function () {
         app.debug( 'timesheetViewModel.total()' );
 
-        var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet( 'hours' ) }, 0 );
-        return STIBO.utils.numberToHours( total, true );
+        // 20150211
+        var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet( 'hours' ) }, STIBO.Timesheet.Configuration.initialHoursOnTimesheet );
+        //var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet( 'hours' ) }, 0 );
+
+        return STIBO.utils.numberToHours(total, true);
     } );
 
     // Total hours registered for sumGroup 'markup1'. Used by 'Bogbind' users.
@@ -256,7 +265,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     // Get a background color depending on entered hours compared with norm hours, as defined by the selected shift.
     self.getTotalBackgroundColor = ko.pureComputed(function () {
         app.debug( 'timesheetViewModel.getTotalBackgroundColor()' );
-        var shiftTmp = self.shift(); // debug
+
+        // 20150211 - No color coding of total hours for CPV.
+        if ( STIBO.Timesheet.Configuration.companyCode === 'CPV' )
+            return;
+
         // requirements
         if ( self.shift() === null )
             return;
@@ -465,6 +478,10 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
             //self.machine() != self.timesheet.machine ||
             self.shift() != self.timesheet.shift ||
             self.hasLeadPressSupplement() != self.timesheet.hasLeadPressSupplement ||
+            self.treForlaegning() != self.timesheet.treForlaegning ||   // 20150211
+            self.fireForlaegning() != self.timesheet.fireForlaegning || // 20150211
+            self.femForlaegning() != self.timesheet.femForlaegning ||   // 20150211
+            self.raadighedsvagt() != self.timesheet.raadighedsvagt ||   // 20150211
             self.comment() != self.timesheet.comment;
 
         // check lines
@@ -485,6 +502,12 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         self.timesheet.shift = self.shift();
         self.timesheet.comment = self.comment();
         self.timesheet.hasLeadPressSupplement = self.hasLeadPressSupplement();
+
+        self.timesheet.treForlaegning = self.treForlaegning();      // 20150211
+        self.timesheet.fireForlaegning = self.fireForlaegning();    // 20150211
+        self.timesheet.femForlaegning = self.femForlaegning();      // 20150211
+        self.timesheet.raadighedsvagt = self.raadighedsvagt();      // 20150211
+
         self.timesheet.supplement1Hours = STIBO.utils.hoursToNumber( self.totalSupplement1Hours() );
         self.timesheet.supplement2Hours = STIBO.utils.hoursToNumber( self.totalSupplement2Hours() );
 
@@ -526,8 +549,14 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         self.machine( STIBO.Timesheet.Configuration.machines.getMachine( timesheet.location, timesheet.machine) );
         //self.machine( timesheet.machine );
         self.shift( timesheet.shift );
-        self.hasLeadPressSupplement( timesheet.hasLeadPressSupplement );
-        self.comment( timesheet.comment );
+        self.hasLeadPressSupplement(timesheet.hasLeadPressSupplement);
+
+        self.treForlaegning(timesheet.treForlaegning); // 20150211
+        self.fireForlaegning(timesheet.fireForlaegning); // 20150211
+        self.femForlaegning(timesheet.femForlaegning); // 20150211
+        self.raadighedsvagt(timesheet.raadighedsvagt); // 20150211
+
+        self.comment(timesheet.comment);
         self.lines( _.map( timesheet.lines, function ( line ) { return new STIBO.Timesheet.TimesheetLineViewModel( app, self, line ) } ) );
 
         self.modifiedByName( timesheet.modifiedByName ); // 20141124

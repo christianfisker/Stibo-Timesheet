@@ -23,8 +23,14 @@ namespace Stibo.Timesheet.Nancy
         /// <returns></returns>
         public IUserIdentity GetUserFromIdentifier(Guid identifier, NancyContext context)
         {
-            var data = new Stibo.Timesheet.Data.DataContext();
+            //>> 20150212 cfi/columbus
+            var companyCode = context.Request.Session["CompanyCode"].ToString();
+            var data = new Stibo.Timesheet.Data.DataContext(companyCode);
+            //var data = new Stibo.Timesheet.Data.DataContext();
+            //<< 20150212 cfi/columbus
+
             var user = data.GetUserByUid(identifier);
+            user.CompanyCode = companyCode; // 20150212 cfi/columbus
 
             return user;
 
@@ -40,9 +46,10 @@ namespace Stibo.Timesheet.Nancy
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static Guid? ValidateUser(string username, string password)
+        public static Guid? ValidateUser(string username, string password, string companyCode)
         {
-            var data = new Stibo.Timesheet.Data.DataContext();
+            //var data = new Stibo.Timesheet.Data.DataContext();
+            var data = new Stibo.Timesheet.Data.DataContext(companyCode);
             var passwordHash = hashPassword(password);
             var user = data.GetUserByLogin(username, passwordHash).FirstOrDefault();
 

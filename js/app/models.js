@@ -13,6 +13,10 @@ STIBO.timesheet.models.Timesheet = function ( employeeId, location, week ) {
     this.shift = null;
     this.comment = null;
     this.hasLeadPressSupplement = false;
+    this.treForlaegning = false;    // 20150211
+    this.fireForlaegning = false;   // 20150211
+    this.femForlaegning = false;    // 20150211
+    this.raadighedsvagt = false;    // 20150211
     this.lines = null;
 };
 

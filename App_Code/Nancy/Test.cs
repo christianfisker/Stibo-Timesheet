@@ -37,7 +37,7 @@ public class Test : NancyModule
 
         Get["/test/getemployees/{id}"] = _ =>
         {
-            var data = new DataContext();
+            var data = new DataContext("SGT");
             return data.GetEmployee(_.id);
         };
 

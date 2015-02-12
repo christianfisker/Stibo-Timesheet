@@ -16,6 +16,8 @@ namespace Stibo.Timesheet.Models
         UserRole Role { get; set; }
         //long? EmployeeId { get; set; }
         Employee Employee { get; set; }
+        string ApproverGroup { get; set; } // 20150211 cfi/columbus
+        string CompanyCode { get; set; } // 20150212 cfi/columbus
 
         bool HasEmployeeAccess(string employeeId);
     }
@@ -48,6 +50,9 @@ namespace Stibo.Timesheet.Models
         //public long? EmployeeId { get; set; }
         public Employee Employee { get; set; }
         public Guid? LoginId { get; set; }
+        public string ApproverGroup { get; set; } // 20150211 cfi/columbus
+
+        public string CompanyCode { get; set; } // 20150212 cfi/columbus
 
         public bool HasEmployeeAccess(string employeeId)
         {
