@@ -367,25 +367,25 @@
                     <!-- ko if ( location() !== 'Bogbind' ) -->
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" data-bind="checked: treForlaegning, enable: isOpen">
+                            <input type="radio" name="Forlaegning" value="3forlaegning" data-bind="checked: forlaegning, enable: isOpen">
                             3 forlægning
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" data-bind="checked: fireForlaegning, enable: isOpen">
+                            <input type="radio" name="Forlaegning" value="4forlaegning" data-bind="checked: forlaegning, enable: isOpen">
                             4 forlægning
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" data-bind="checked: femForlaegning, enable: isOpen">
+                            <input type="radio" name="Forlaegning" value="5forlaegning" data-bind="checked: forlaegning, enable: isOpen">
                             5 forlægning
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" data-bind="checked: raadighedsvagt, enable: isOpen">
+                            <input type="radio"  name="Forlaegning" value="raadighedsvagt" data-bind="checked: forlaegning, enable: isOpen">
                             Rådighedsvagt
                         </label>
                     </div>
@@ -427,13 +427,13 @@
     <!-- References to custom JavaScript -->
     <script src="js/utils/columbus.jquery.pubsub.js?v=20140926"></script>
     <script src="js/app/utils.js"></script>
-    <script src="js/app/configuration-cpv.js"></script>
+    <script src="js/app/configuration-cpv.js?v=20150217"></script>
     <script src="js/app/dataservice.js?v=20150212"></script>
-    <script src="js/app/models.js?v=20150212"></script>
+    <script src="js/app/models.js?v=20150217"></script>
     <script src="js/app/userviewmodel.js?v=20150212"></script>
     <script src="js/app/loginviewmodel.js?v=20150212"></script>
     <script src="js/app/overviewviewmodel.js?v=20150212"></script>
-    <script src="js/app/timesheetviewmodel.js?v=20150212"></script>
+    <script src="js/app/timesheetviewmodel.js?v=20150217"></script>
     <script src="js/app/timesheetlineviewmodel.js?v=20150212"></script>
     <script src="js/app/main.dispatcher.js?v=20150212"></script>
     <script src="js/app/main.timesheetfactory.js?v=20150212"></script>

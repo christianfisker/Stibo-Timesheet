@@ -172,21 +172,7 @@
                             <th>I alt</th>
                         </tr>
                     </thead>
-                    <script type="text/html">
-                    <tfoot>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: right; font-weight: bold" data-bind="text: total, style: { backgroundColor: getTotalBackgroundColor }"></td>
-                        </tr>
-                    </tfoot>
-                    </script>
+                    <tfoot></tfoot>
                     <tbody id="_navigationkeys" data-bind="foreach: lines, visible: isOpen">
                         <!-- ko if ( getLineView() === 'hours' ) -->
                         <tr class="right">
@@ -232,6 +218,7 @@
                         </tr>
                         <!-- /ko -->
                     </tbody>
+
                     <tbody data-bind="foreach: lines, visible: isClosed">
                         <!-- ko if ( getLineView() === 'hours' ) -->
                         <tr class="right">

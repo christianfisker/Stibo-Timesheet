@@ -13,10 +13,10 @@ STIBO.Timesheet.Configuration = STIBO.Timesheet.Configuration || {};
 //    dummy: null
 //};
 
-STIBO.Timesheet.Configuration.debugActive = true;
+STIBO.Timesheet.Configuration.debugActive = true; // REMEMBER - Set to false when LIVE
 
 STIBO.Timesheet.Configuration.companyCode = 'SGT';
-STIBO.Timesheet.Configuration.initialHoursOnTimesheet = 0;
+STIBO.Timesheet.Configuration.initialHoursOnTimesheet = 0; // CPV timesheets start with 74 hours and subtract entered hours!
 
 // not in use
 STIBO.Timesheet.Configuration.states = {
@@ -48,10 +48,16 @@ STIBO.Timesheet.Configuration.machines = {
             { id: '3HP', name: '3-hold Planskærer (108t)', teamId: '3HP' }
         ]
     },
-    getLocation: function (location) {
+    getLocation: function ( location ) {
+        if ( location.toLowerCase() === 'lager' )
+            location = 'Rotation';
+
         return this.locations[location];
     },
-    getMachine: function (location, id) {
+    getMachine: function ( location, id ) {
+        if ( location.toLowerCase() === 'lager' )
+            location = 'Rotation';
+
         return STIBO.utils.find(this.locations[location], 'id', id);
     }
 };
@@ -99,10 +105,16 @@ STIBO.Timesheet.Configuration.shifts = {
             { id: 'NAT34', title: 'Nat hold', hours: 34, factor: 1.09, teamId: '3HP' }
         ]
     },
-    getLocation: function (location) {
+    getLocation: function ( location ) {
+        if ( location.toLowerCase() === 'lager' )
+            location = 'Rotation';
+
         return this.locations[location];
     },
-    getShift: function (location, id) {
+    getShift: function ( location, id ) {
+        if ( location.toLowerCase() === 'lager' )
+            location = 'Rotation';
+
         return STIBO.utils.find(this.locations[location], 'id', id);
     }
 };
@@ -114,6 +126,7 @@ STIBO.Timesheet.Configuration.lines = {
     // includeInGroupSum   Hvis 'false' så tælles timerne ikke med i sumGroup summen. !! Skal muligvis ændres som følge af markup sum grupperne??
     // sumNegative          Hvis 'true' så tæller timerne negativt i sumGroup summen.
     // saveToDatabase       Hvis 'false' så gemmes linien ikke i databasen.
+    // foldGroup            Gruppering af linjer til hide/show
     locations: {
         'Rotation': [
             { type: 'A', lineView: 'hours', sumGroup: 'hours', description: 'Timer paa arbejdet inkl. overarbejde' },
@@ -145,7 +158,8 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'M', lineView: 'hours', sumGroup: 'hours', description: 'Betalt pause ved arbejde over 2 timer = 0,25 time per dag', sumNegative: true },
             { type: 'SUM-HOURS', lineView: 'sum', sumGroup: 'hours', includeInGroupSum: false, saveToDatabase: false },
 
-            { type: 'HEADER1', description: 'Maskinfører tillæg (skriv antal timer)', saveToDatabase: false },
+            { type: 'HEADER1', description: 'Maskinfører tillæg (skriv antal timer)', foldGroup: 'fgrp1', saveToDatabase: false },
+            { type: 'FOLDGROUP-START', groupId: 'fgrp1', saveToDatabase: false },
             { type: 'X1', lineView: 'hours', sumGroup: 'supplement1', description: 'Binder' },
             { type: 'X2', lineView: 'hours', sumGroup: 'supplement1', description: 'Trekniv' },
             { type: 'X3', lineView: 'hours', sumGroup: 'supplement1', description: 'Optager' },
@@ -157,13 +171,20 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'X7', lineView: 'hours', sumGroup: 'supplement2', description: 'Prima Plus (1/2) klammehæft' },
             { type: 'X8', lineView: 'hours', sumGroup: 'supplement2', description: 'Prima 2 (1/2) klammehæft' },
             { type: 'X9', lineView: 'hours', sumGroup: 'supplement2', description: 'Falsemaskine (1/2)' },
-            { type: 'SUM-MARKUP2', lineView: 'sum', sumGroup: 'supplement2', includeInGroupSum: false, saveToDatabase: false }
+            { type: 'SUM-MARKUP2', lineView: 'sum', sumGroup: 'supplement2', includeInGroupSum: false, saveToDatabase: false },
+            { type: 'FOLDGROUP-END', groupId: 'fgrp1', saveToDatabase: false }
         ]
     },
-    getLocation: function (location) {
+    getLocation: function ( location ) {
+        if ( location.toLowerCase() === 'lager' )
+            location = 'Rotation';
+
         return this.locations[location];
     },
-    getLine: function (location, type) {
+    getLine: function ( location, type ) {
+        if ( location.toLowerCase() === 'lager' )
+            location = 'Rotation';
+
         return STIBO.utils.find(this.locations[location], 'type', type);
     }
 };

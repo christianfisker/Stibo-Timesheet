@@ -56,10 +56,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     self.shift = ko.observable( null );
     self.hasLeadPressSupplement = ko.observable(false);
 
-    self.treForlaegning = ko.observable(false); // 20150211
-    self.fireForlaegning = ko.observable(false); // 20150211
-    self.femForlaegning = ko.observable(false); // 20150211
-    self.raadighedsvagt = ko.observable(false); // 20150211
+    self.forlaegning = ko.observable( null ); // 20150217
+    //self.treForlaegning = ko.observable(false); // 20150211
+    //self.fireForlaegning = ko.observable(false); // 20150211
+    //self.femForlaegning = ko.observable(false); // 20150211
+    //self.raadighedsvagt = ko.observable(false); // 20150211
 
     self.comment = ko.observable( '' );
 
@@ -478,10 +479,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
             //self.machine() != self.timesheet.machine ||
             self.shift() != self.timesheet.shift ||
             self.hasLeadPressSupplement() != self.timesheet.hasLeadPressSupplement ||
-            self.treForlaegning() != self.timesheet.treForlaegning ||   // 20150211
-            self.fireForlaegning() != self.timesheet.fireForlaegning || // 20150211
-            self.femForlaegning() != self.timesheet.femForlaegning ||   // 20150211
-            self.raadighedsvagt() != self.timesheet.raadighedsvagt ||   // 20150211
+            self.forlaegning() != self.timesheet.forlaegning || // 20150217
+            //self.treForlaegning() != self.timesheet.treForlaegning ||   // 20150211
+            //self.fireForlaegning() != self.timesheet.fireForlaegning || // 20150211
+            //self.femForlaegning() != self.timesheet.femForlaegning ||   // 20150211
+            //self.raadighedsvagt() != self.timesheet.raadighedsvagt ||   // 20150211
             self.comment() != self.timesheet.comment;
 
         // check lines
@@ -503,10 +505,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         self.timesheet.comment = self.comment();
         self.timesheet.hasLeadPressSupplement = self.hasLeadPressSupplement();
 
-        self.timesheet.treForlaegning = self.treForlaegning();      // 20150211
-        self.timesheet.fireForlaegning = self.fireForlaegning();    // 20150211
-        self.timesheet.femForlaegning = self.femForlaegning();      // 20150211
-        self.timesheet.raadighedsvagt = self.raadighedsvagt();      // 20150211
+        self.timesheet.forlaegning = self.forlaegning(); // 20150217
+        //self.timesheet.treForlaegning = self.treForlaegning();      // 20150211
+        //self.timesheet.fireForlaegning = self.fireForlaegning();    // 20150211
+        //self.timesheet.femForlaegning = self.femForlaegning();      // 20150211
+        //self.timesheet.raadighedsvagt = self.raadighedsvagt();      // 20150211
 
         self.timesheet.supplement1Hours = STIBO.utils.hoursToNumber( self.totalSupplement1Hours() );
         self.timesheet.supplement2Hours = STIBO.utils.hoursToNumber( self.totalSupplement2Hours() );
@@ -551,10 +554,11 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         self.shift( timesheet.shift );
         self.hasLeadPressSupplement(timesheet.hasLeadPressSupplement);
 
-        self.treForlaegning(timesheet.treForlaegning); // 20150211
-        self.fireForlaegning(timesheet.fireForlaegning); // 20150211
-        self.femForlaegning(timesheet.femForlaegning); // 20150211
-        self.raadighedsvagt(timesheet.raadighedsvagt); // 20150211
+        self.forlaegning( timesheet.forlaegning ); // 20150217
+        //self.treForlaegning(timesheet.treForlaegning); // 20150211
+        //self.fireForlaegning(timesheet.fireForlaegning); // 20150211
+        //self.femForlaegning(timesheet.femForlaegning); // 20150211
+        //self.raadighedsvagt(timesheet.raadighedsvagt); // 20150211
 
         self.comment(timesheet.comment);
         self.lines( _.map( timesheet.lines, function ( line ) { return new STIBO.Timesheet.TimesheetLineViewModel( app, self, line ) } ) );

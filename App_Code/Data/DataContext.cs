@@ -244,10 +244,7 @@ namespace Stibo.Timesheet.Data
                     ModifiedDate,
                     ModifiedBy,
                     ModifiedRole,
-                    TreForlaegning,
-                    FireForlaegning,
-                    FemForlaegning,
-                    Raadighedsvagt
+                    Forlaegning
                 )
                 OUTPUT Inserted.Id
                 VALUES(
@@ -264,10 +261,7 @@ namespace Stibo.Timesheet.Data
                     @ModifiedDate,
                     @ModifiedBy,
                     @ModifiedRole,
-                    @TreForlaegning,
-                    @FireForlaegning,
-                    @FemForlaegning,
-                    @Raadighedsvagt
+                    @Forlaegning
                 )";
 
             var row = Connection.Query(
@@ -341,11 +335,7 @@ namespace Stibo.Timesheet.Data
                     ModifiedBy = @ModifiedBy,
                     ModifiedRole = @ModifiedRole,
                     IsHistory = @IsHistory,
-                    TreForlaegning = @TreForlaegning,
-                    FireForlaegning = @FireForlaegning,
-                    FemForlaegning = @FemForlaegning,
-                    Raadighedsvagt = @Raadighedsvagt
-
+                    Forlaegning = @Forlaegning
                 WHERE
                     Id = @Id
                 ";

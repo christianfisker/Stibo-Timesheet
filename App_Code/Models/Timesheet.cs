@@ -32,12 +32,14 @@ namespace Stibo.Timesheet.Models
         public string ModifiedByName { get; set; }
         public bool IsHistory { get; set; }
 
-        //>> 20150211 cfi
-        public bool TreForlaegning { get; set; }
-        public bool FireForlaegning { get; set; }
-        public bool FemForlaegning { get; set; }
-        public bool Raadighedsvagt { get; set; }
-        //<< 20150211 cfi
+        // 20150217
+        public string Forlaegning { get; set; } 
+        ////>> 20150211 cfi
+        //public bool TreForlaegning { get; set; }
+        //public bool FireForlaegning { get; set; }
+        //public bool FemForlaegning { get; set; }
+        //public bool Raadighedsvagt { get; set; }
+        ////<< 20150211 cfi
 
         public List<TimesheetLine> Lines { get; set; }
 
