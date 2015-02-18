@@ -45,7 +45,7 @@ namespace Stibo.Timesheet.Data
         {
             string sql = @"select * from Users u 
                 left join Employees e on e.UserId = u.Id 
-                where u.LoginId = @loginId";
+                where u.LoginId = @loginId and u.IsActive = 1";
 
             return Connection.Query<User, Employee, User>(sql, (user, employee) => { user.Employee = employee; return user; }, new { loginId = loginId }).SingleOrDefault();
         }
@@ -54,7 +54,7 @@ namespace Stibo.Timesheet.Data
         {
             string sql = @"select * from Users u 
                 left join Employees e on e.UserId = u.Id 
-                where u.Username = @username and u.Password = @password";
+                where u.Username = @username and u.Password = @password and u.IsActive = 1";
 
             return Connection.Query<User, Employee, User>(sql, (user, employee) => { user.Employee = employee; return user; }, new { username = username, password = password });
         }
@@ -89,10 +89,15 @@ namespace Stibo.Timesheet.Data
             return Connection.Query<Employee>("select * from Employees where UserId = @userId", new { userId = userId }).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Return all employees for viewing by the payroll role.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Employee> GetEmployees()
         {
-            string sql = @"select em.*,us.Username from Employees em
+            string sql = @"select em.*, us.Username from Employees em
                 join Users as us on us.Id = em.UserId
+                where em.IsActive = 1
                 order by us.username";
 
             return Connection.Query<Employee>(sql);
@@ -108,9 +113,9 @@ namespace Stibo.Timesheet.Data
         /// <returns></returns>
         public IEnumerable<Employee> GetEmployees(string approverGroup)
         {
-            string sql = @"select em.*,us.Username from Employees em
+            string sql = @"select em.*, us.Username from Employees em
                 join Users as us on us.Id = em.UserId
-                where em.Location = @approverGroup
+                where em.Location = @approverGroup and em.IsActive = 1
                 order by us.username";
 
             return Connection.Query<Employee>(sql, new { approverGroup = approverGroup });
