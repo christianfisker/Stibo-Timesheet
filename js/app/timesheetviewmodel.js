@@ -222,8 +222,13 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     self.total = ko.pureComputed( function () {
         app.debug( 'timesheetViewModel.total()' );
 
-        var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet() }, 0 );
-        return STIBO.utils.numberToHours( total, true );
+        // 20150224 cfi/columbus
+        var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet( 'hours' ) }, 0 );
+        //var total = _.reduce( self.lines(), function ( memo, line ) { return memo + line.totalForTimesheet() }, 0 );
+
+        // 20150224 cfi/columbus
+        return total;
+        //return STIBO.utils.numberToHours( total, true );
     } );
 
     // Total hours registered for sumGroup 'hours'. Normal hours used by all users.

@@ -13,7 +13,7 @@ STIBO.Timesheet.Configuration = STIBO.Timesheet.Configuration || {};
 //    dummy: null
 //};
 
-STIBO.Timesheet.Configuration.debugActive = true; // REMEMBER - Set to false when LIVE
+STIBO.Timesheet.Configuration.debugActive = false; // REMEMBER - Set to false when LIVE
 
 STIBO.Timesheet.Configuration.companyCode = 'SGT';
 STIBO.Timesheet.Configuration.initialHoursOnTimesheet = 0; // CPV timesheets start with 74 hours and subtract entered hours!
@@ -79,6 +79,7 @@ STIBO.Timesheet.Configuration.shifts = {
             { id: 'DAG38', title: 'Dag hold', hours: 38, factor: 0.97, teamId: '2H' },
             { id: 'AFTEN34', title: 'Aften hold', hours: 34, factor: 1.09, teamId: '2H' },
 
+            { id: 'DAG36', title: 'Dag hold', hours: 36, factor: 1.03, teamId: 'FT' }, // 20150224 cfi/columbus
             { id: 'DAG37', title: 'Dag hold', hours: 37, factor: 1.00, teamId: 'FT' },
             { id: 'WE24', title: 'Week end', hours: 24, factor: 1.55, teamId: 'FT' },
             { id: 'WE1-31', title: 'Week end 1', hours: 31, factor: 1.19, teamId: 'FT' },
@@ -93,6 +94,7 @@ STIBO.Timesheet.Configuration.shifts = {
             { id: 'DAG40', title: 'Dag hold', hours: 40, factor: 0.93, teamId: '3H' },
             { id: 'AFTEN34', title: 'Aften hold', hours: 34, factor: 1.09, teamId: '3H' },
             { id: 'NAT34', title: 'Nat hold', hours: 34, factor: 1.09, teamId: '3H' },
+            { id: 'WE1-29', title: 'Week end', hours: 29, factor: 1.28, teamId: '3H' }, // 20150224 cfi/columbus
 
             { id: 'WE1-29', title: 'Week end 1', hours: 29, factor: 1.28, teamId: '4H' },
             { id: 'DAG40', title: 'Dag hold', hours: 40, factor: 0.93, teamId: '4H' },
@@ -164,6 +166,7 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'X2', lineView: 'hours', sumGroup: 'supplement1', description: 'Trekniv' },
             { type: 'X3', lineView: 'hours', sumGroup: 'supplement1', description: 'Optager' },
             { type: 'X4', lineView: 'hours', sumGroup: 'supplement1', description: 'Sitma' },
+            { type: 'X10', lineView: 'hours', sumGroup: 'supplement1', description: 'Planskærer' }, // 20150224 cfi/columbus
             { type: 'X5', lineView: 'hours', sumGroup: 'supplement1', description: 'UV-lak' },
             { type: 'SUM-MARKUP1', lineView: 'sum', sumGroup: 'supplement1', includeInGroupSum: false, saveToDatabase: false },
 
