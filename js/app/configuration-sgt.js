@@ -145,7 +145,7 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'SUM-HOURS', lineView: 'sum', sumGroup: 'hours', includeInGroupSum: false, saveToDatabase: false }
         ],
         'Bogbind': [
-            { type: 'A', lineView: 'hours', sumGroup: 'hours', description: 'Timer på arbejdet inkl. overarbejde samt betalt pause' },
+            { type: 'A', lineView: 'hours', sumGroup: 'hours', description: 'Timer på arbejdet inkl. overarbejde' },
             { type: 'B', lineView: 'hours', sumGroup: 'hours', description: 'Forlægning', includeInGroupSum: false },
             { type: 'C', lineView: 'hours', sumGroup: 'hours', description: 'Overarbejde 100%', sumNegative: true },
             { type: 'D', lineView: 'hours', sumGroup: 'hours', description: 'Hensat til afspadsering', includeInGroupSum: false },
@@ -157,7 +157,7 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'H', lineView: 'hours', sumGroup: 'hours', description: 'Feriefri - antal timer' },
             { type: 'I', lineView: 'hours', sumGroup: 'hours', description: 'Soen-/helligdage - antal timer' },
             { type: 'L', lineView: 'hours', sumGroup: 'hours', description: 'Aflyst arbejde - firmabetalte timer tastes i "Timer på arbejde"' },
-            { type: 'M', lineView: 'hours', sumGroup: 'hours', description: 'Betalt pause ved arbejde over 2 timer = 0,25 time per dag', sumNegative: true },
+            { type: 'M', lineView: 'hours', sumGroup: 'hours', description: 'Betalt pause ved arbejde over 2 timer = 0,25 time per dag', includeInGroupSum: false },
             { type: 'SUM-HOURS', lineView: 'sum', sumGroup: 'hours', includeInGroupSum: false, saveToDatabase: false },
 
             { type: 'HEADER1', description: 'Maskinfører tillæg (skriv antal timer)', foldGroup: 'fgrp1', saveToDatabase: false },
