@@ -42,7 +42,7 @@ STIBO.Timesheet.Configuration.machines = {
         'Bogbind': [
             { id: '2H', name: '2-hold (72t)', teamId: '2H' },
             { id: 'FT', name: 'Fast tur', teamId: 'FT' },
-            { id: 'TA', name: 'Tryk assistenter', teamId: 'TA' },
+            { id: '2HN', name: '2-hold nat', teamId: '2HN' },
             { id: '3H', name: '3-hold (108t)', teamId: '3H' },
             { id: '4H', name: '4-hold (132t)', teamId: '4H' },
             { id: '3HP', name: '3-hold Planskærer (108t)', teamId: '3HP' }
@@ -85,11 +85,15 @@ STIBO.Timesheet.Configuration.shifts = {
             { id: 'WE1-31', title: 'Week end 1', hours: 31, factor: 1.19, teamId: 'FT' },
             { id: 'WE2-31', title: 'Week end 2', hours: 31, factor: 1.19, teamId: 'FT' },
 
-            { id: 'DAG38', title: 'Dag hold', hours: 38, factor: 0.93, teamId: 'TA' },
-            { id: 'AFTEN38', title: 'Aften hold', hours: 38, factor: 1.09, teamId: 'TA' },
-            { id: 'NAT32', title: 'Nat hold', hours: 32, factor: 1.16, teamId: 'TA' },
-            { id: 'WE1', title: 'Week end 1', hours: 28, factor: 1.28, teamId: 'TA' },
-            { id: 'WE2', title: 'Week end 2', hours: 28, factor: 1.28, teamId: 'TA' },
+            // 20150312 cfi/columbus - trykkerassistenter slettet og 2-hold nat tilføjet
+            { id: 'NAT34SPEC', title: 'Nat hold', hours: 34, factor: 1.09, teamId: '2HN' },
+            { id: 'WE1-29', title: 'Week end 1', hours: 29, factor: 1.28, teamId: '2HN' },
+
+            //{ id: 'DAG38', title: 'Dag hold', hours: 38, factor: 0.93, teamId: 'TA' },
+            //{ id: 'AFTEN38', title: 'Aften hold', hours: 38, factor: 1.09, teamId: 'TA' },
+            //{ id: 'NAT32', title: 'Nat hold', hours: 32, factor: 1.16, teamId: 'TA' },
+            //{ id: 'WE1', title: 'Week end 1', hours: 28, factor: 1.28, teamId: 'TA' },
+            //{ id: 'WE2', title: 'Week end 2', hours: 28, factor: 1.28, teamId: 'TA' },
 
             { id: 'DAG40', title: 'Dag hold', hours: 40, factor: 0.93, teamId: '3H' },
             { id: 'AFTEN34', title: 'Aften hold', hours: 34, factor: 1.09, teamId: '3H' },
@@ -125,6 +129,8 @@ STIBO.Timesheet.Configuration.lines = {
     // type                 Unikt ID for linjen.
     // lineView             Hvordan linien skal renderes (template).
     // sumGroup             Bruges ved summering og visning af sum.
+    // description          Navn/beskrivelse af linjen
+    // help                 Der vises en hjælpetekst på linjen
     // includeInGroupSum   Hvis 'false' så tælles timerne ikke med i sumGroup summen. !! Skal muligvis ændres som følge af markup sum grupperne??
     // sumNegative          Hvis 'true' så tæller timerne negativt i sumGroup summen.
     // saveToDatabase       Hvis 'false' så gemmes linien ikke i databasen.

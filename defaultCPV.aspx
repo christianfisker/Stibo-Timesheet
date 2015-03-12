@@ -190,7 +190,12 @@
                     <tbody id="_navigationkeys" data-bind="foreach: lines, visible: isOpen">
                         <!-- ko if ( getLineView() === 'hours' ) -->
                         <tr class="right">
-                            <td style="text-align: left;" data-bind="text: description"></td>
+                            <td style="text-align: left;">
+                                <span data-bind="text: description"></span>
+                                <!-- ko if ( help !== null ) -->
+                                <span class="text-info small" data-bind="text: help"></span>
+                                <!-- /ko -->
+                            </td>
                             <td>
                                 <input type="text" data-bind="hourValue: monday, attr: { 'data-row': $index(), 'data-column': 0 }" /></td>
                             <td>
@@ -335,10 +340,13 @@
                             <td style="text-align: left;">FerieFri</td><td data-bind="text: employeeSaldoFerieFri().toFixed(2)"></td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;">Afspadsering</td><td data-bind="text: employeeSaldoAfspadsering().toFixed(2)"></td>
+                            <td style="text-align: left;">Afspadsering tvungen</td><td data-bind="text: employeeSaldoAfspadsering().toFixed(2)"></td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;">Genetime</td><td data-bind="text: employeeSaldoGene().toFixed(2)"></td>
+                            <td style="text-align: left;">Afspadsering egne timer</td><td data-bind="text: employeeSaldoAfspadseringEgne().toFixed( 2 )"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">Afspadsering tillæg</td><td data-bind="text: employeeSaldoAfspadseringTillaeg().toFixed( 2 )"></td>
                         </tr>
                     </tbody>
                     <script type="text/html">
@@ -367,20 +375,14 @@
                     <!-- ko if ( location() !== 'Bogbind' ) -->
                     <div class="checkbox">
                         <label>
-                            <input type="radio" name="Forlaegning" value="3forlaegning" data-bind="checked: forlaegning, enable: isOpen">
-                            3 forlægning
+                            <input type="radio" name="Forlaegning" value="" data-bind="checked: forlaegning, enable: isOpen">
+                            Ingen forlægning
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="radio" name="Forlaegning" value="4forlaegning" data-bind="checked: forlaegning, enable: isOpen">
-                            4 forlægning
-                        </label>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="radio" name="Forlaegning" value="5forlaegning" data-bind="checked: forlaegning, enable: isOpen">
-                            5 forlægning
+                            <input type="radio" name="Forlaegning" value="forlaegning" data-bind="checked: forlaegning, enable: isOpen">
+                            Forlægning
                         </label>
                     </div>
                     <div class="checkbox">
@@ -427,14 +429,14 @@
     <!-- References to custom JavaScript -->
     <script src="js/utils/columbus.jquery.pubsub.js?v=20140926"></script>
     <script src="js/app/utils.js"></script>
-    <script src="js/app/configuration-cpv.js?v=20150217"></script>
+    <script src="js/app/configuration-cpv.js?v=20150312"></script>
     <script src="js/app/dataservice.js?v=20150212"></script>
-    <script src="js/app/models.js?v=20150217"></script>
+    <script src="js/app/models.js?v=20150313"></script>
     <script src="js/app/userviewmodel.js?v=20150212"></script>
     <script src="js/app/loginviewmodel.js?v=20150212"></script>
     <script src="js/app/overviewviewmodel.js?v=20150212"></script>
-    <script src="js/app/timesheetviewmodel.js?v=20150217"></script>
-    <script src="js/app/timesheetlineviewmodel.js?v=20150212"></script>
+    <script src="js/app/timesheetviewmodel.js?v=20150312"></script>
+    <script src="js/app/timesheetlineviewmodel.js?v=20150312"></script>
     <script src="js/app/main.dispatcher.js?v=20150212"></script>
     <script src="js/app/main.timesheetfactory.js?v=20150212"></script>
     <script src="js/app/main.js?v=20150212"></script>

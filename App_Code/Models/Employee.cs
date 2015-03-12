@@ -18,6 +18,8 @@ namespace Stibo.Timesheet.Models
         public float SaldoFerie { get; set; }
         public float SaldoFerieFri { get; set; }
         public float SaldoAfspadsering { get; set; }
+        public float SaldoAfspadseringEgne { get; set; }    // 20150312 cfi/columbus - Bruges af CPV
+        public float SaldoAfspadseringTillaeg { get; set; } // 20150312 cfi/columbus - Bruges af CPV
         public float SaldoGene { get; set; }
         public DateTime ModifiedDate { get; set; }
         public IEnumerable<Timesheet> Timesheets { get; set; }

@@ -25,6 +25,7 @@ STIBO.Timesheet.TimesheetLineViewModel = function ( app, parent, model ) {
 
     this.type = model.type;
     this.description = this.lineConfig.description;
+    this.help = typeof this.lineConfig.help === 'string' ? this.lineConfig.help : null; // 20150312 cfi/columbus
     this.sunday = ko.observable( STIBO.utils.numberToHours( model.sunday ) );
     this.monday = ko.observable( STIBO.utils.numberToHours( model.monday ) );
     this.tuesday = ko.observable( STIBO.utils.numberToHours( model.tuesday ) );

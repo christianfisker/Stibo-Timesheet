@@ -426,14 +426,14 @@
     <!-- References to custom JavaScript -->
     <script src="js/utils/columbus.jquery.pubsub.js?v=20140926"></script>
     <script src="js/app/utils.js"></script>
-    <script src="js/app/configuration-sgt.js"></script>
+    <script src="js/app/configuration-sgt.js?v=20150312"></script>
     <script src="js/app/dataservice.js?v=20150212"></script>
-    <script src="js/app/models.js?v=20150212"></script>
+    <script src="js/app/models.js?v=20150313"></script>
     <script src="js/app/userviewmodel.js?v=20150212"></script>
     <script src="js/app/loginviewmodel.js?v=20150212"></script>
     <script src="js/app/overviewviewmodel.js?v=20150212"></script>
-    <script src="js/app/timesheetviewmodel.js?v=20150212"></script>
-    <script src="js/app/timesheetlineviewmodel.js?v=20150212"></script>
+    <script src="js/app/timesheetviewmodel.js?v=20150312"></script>
+    <script src="js/app/timesheetlineviewmodel.js?v=20150312"></script>
     <script src="js/app/main.dispatcher.js?v=20150212"></script>
     <script src="js/app/main.timesheetfactory.js?v=20150212"></script>
     <script src="js/app/main.js?v=20150212"></script>

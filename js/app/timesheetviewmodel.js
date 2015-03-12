@@ -42,7 +42,9 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
     self.employeeSaldoFerie = ko.observable(); // 20141103
     self.employeeSaldoFerieFri = ko.observable(); // 20141103
     self.employeeSaldoAfspadsering = ko.observable(); //20141103
-    self.employeeSaldoGene = ko.observable(); //20141103
+    self.employeeSaldoAfspadseringEgne = ko.observable(); //20150312 cfi/columbus - Bruges kun af CPV
+    self.employeeSaldoAfspadseringTillaeg = ko.observable();  //20150312 cfi/columbus - Bruges kun af CPV
+    self.employeeSaldoGene = ko.observable();  //20150312 cfi/columbus - Bruges kun af SGT
 
     self.employeeId = ko.observable();
     self.employeeName = ko.observable();
@@ -115,86 +117,86 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         return self.state();
     };
 
-    // calculated fields
-    self.brugtFerie = ko.pureComputed( function () {
-        app.debug( 'timesheetViewModel.brugtFerie()' );
+    // calculated fields - Bruges ikke endnu.
+    //self.brugtFerie = ko.pureComputed( function () {
+    //    app.debug( 'timesheetViewModel.brugtFerie()' );
 
-        var hours = 0,
-            line = STIBO.utils.find( self.lines(), 'type', 'G' ),
-            shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
+    //    var hours = 0,
+    //        line = STIBO.utils.find( self.lines(), 'type', 'G' ),
+    //        shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
 
-        if ( _.isObject(line) && _.isObject(shift) ) {
-            hours = line.totalForLine() * shift.factor;
-        }
+    //    if ( _.isObject(line) && _.isObject(shift) ) {
+    //        hours = line.totalForLine() * shift.factor;
+    //    }
 
-        return hours.toFixed( 2 );
-    } );
+    //    return hours.toFixed( 2 );
+    //} );
 
-    self.restFerie = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.restFerie()' );
+    //self.restFerie = ko.pureComputed( function () {
+    //    app.debug( 'TimesheetViewModel.restFerie()' );
 
-        return (self.employee.saldoFerie - parseFloat(self.brugtFerie())).toFixed(2);
-    } );
+    //    return (self.employee.saldoFerie - parseFloat(self.brugtFerie())).toFixed(2);
+    //} );
 
-    self.brugtFerieFri = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.brugtFerieFri()' );
+    //self.brugtFerieFri = ko.pureComputed( function () {
+    //    app.debug( 'TimesheetViewModel.brugtFerieFri()' );
 
-        var hours = 0,
-            line = STIBO.utils.find( self.lines(), 'type', 'H' ),
-            shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
+    //    var hours = 0,
+    //        line = STIBO.utils.find( self.lines(), 'type', 'H' ),
+    //        shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
 
-        if ( _.isObject( line ) && _.isObject( shift ) ) {
-            hours = line.totalForLine() * shift.factor;
-        }
+    //    if ( _.isObject( line ) && _.isObject( shift ) ) {
+    //        hours = line.totalForLine() * shift.factor;
+    //    }
 
-        return hours.toFixed( 2 );
-    } );
+    //    return hours.toFixed( 2 );
+    //} );
 
-    self.restFerieFri = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.restFerieFri()' );
+    //self.restFerieFri = ko.pureComputed( function () {
+    //    app.debug( 'TimesheetViewModel.restFerieFri()' );
 
-        return ( self.employee.saldoFerieFri - parseFloat( self.brugtFerieFri() ) ).toFixed( 2 );
-    } );
+    //    return ( self.employee.saldoFerieFri - parseFloat( self.brugtFerieFri() ) ).toFixed( 2 );
+    //} );
 
-    self.brugtAfspadsering = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.brugtAfspadsering()' );
+    //self.brugtAfspadsering = ko.pureComputed( function () {
+    //    app.debug( 'TimesheetViewModel.brugtAfspadsering()' );
 
-        var hours = 0,
-            line = STIBO.utils.find( self.lines(), 'type', 'E' ),
-            shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
+    //    var hours = 0,
+    //        line = STIBO.utils.find( self.lines(), 'type', 'E' ),
+    //        shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
 
-        if ( _.isObject( line ) && _.isObject( shift ) ) {
-            hours = line.totalForLine() * shift.factor;
-        }
+    //    if ( _.isObject( line ) && _.isObject( shift ) ) {
+    //        hours = line.totalForLine() * shift.factor;
+    //    }
 
-        return hours.toFixed( 2 );
-    } );
+    //    return hours.toFixed( 2 );
+    //} );
 
-    self.restAfspadsering = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.restAfspadsering()' );
+    //self.restAfspadsering = ko.pureComputed( function () {
+    //    app.debug( 'TimesheetViewModel.restAfspadsering()' );
 
-        return ( self.employee.saldoAfspadsering - parseFloat( self.brugtAfspadsering() ) ).toFixed( 2 );
-    } );
+    //    return ( self.employee.saldoAfspadsering - parseFloat( self.brugtAfspadsering() ) ).toFixed( 2 );
+    //} );
 
-    self.brugtGene = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.brugtGene()' );
+    //self.brugtGene = ko.pureComputed( function () {
+    //    app.debug( 'TimesheetViewModel.brugtGene()' );
 
-        var hours = 0,
-            line = STIBO.utils.find( self.lines(), 'type', 'F' ),
-            shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
+    //    var hours = 0,
+    //        line = STIBO.utils.find( self.lines(), 'type', 'F' ),
+    //        shift = STIBO.Timesheet.Configuration.shifts.getShift( self.location(), self.shift() );
 
-        if ( _.isObject( line ) && _.isObject( shift ) ) {
-            hours = line.totalForLine() * shift.factor;
-        }
+    //    if ( _.isObject( line ) && _.isObject( shift ) ) {
+    //        hours = line.totalForLine() * shift.factor;
+    //    }
 
-        return hours.toFixed( 2 );
-    } );
+    //    return hours.toFixed( 2 );
+    //} );
 
-    self.restGene = ko.pureComputed( function () {
-        app.debug( 'TimesheetViewModel.restGene()' );
+    //self.restGene = ko.pureComputed( function () {
+    //    app.debug( 'TimesheetViewModel.restGene()' );
 
-        return ( self.employee.saldoGene - parseFloat( self.brugtGene() ) ).toFixed( 2 );
-    } );
+    //    return ( self.employee.saldoGene - parseFloat( self.brugtGene() ) ).toFixed( 2 );
+    //} );
 
     //# region - configuration
 
@@ -548,7 +550,9 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
         self.employeeSaldoFerie( employee.saldoFerie ); // 20141103
         self.employeeSaldoFerieFri( employee.saldoFerieFri ); // 20141103
         self.employeeSaldoAfspadsering( employee.saldoAfspadsering ); //20141103
-        self.employeeSaldoGene( employee.saldoGene ); //20141103
+        self.employeeSaldoAfspadseringEgne( employee.saldoAfspadseringEgne ); // 20150312 cfi/columbus - Bruges kun af CPV
+        self.employeeSaldoAfspadseringTillaeg( employee.saldoAfspadseringTillaeg ); // 20150312 cfi/columbus - Bruges kun af CPV
+        self.employeeSaldoGene( employee.saldoGene ); // 20150312 cfi/columbus - Bruges kun af SGT
 
         self.employeeId( employee.id );
         self.employeeName( employee.name );
