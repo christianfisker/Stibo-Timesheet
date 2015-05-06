@@ -376,7 +376,7 @@ STIBO.Timesheet.TimesheetViewModel = function ( app ) {
 
             allowSave = true;
         }
-        else if ( app.user.role === 3 ) {
+        else if ( app.user.role === 3 && validate(true) === true ) {
             timesheet.state = 'CLOSED';
             allowSave = true;
         }

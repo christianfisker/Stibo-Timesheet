@@ -435,7 +435,7 @@
     <script src="js/app/userviewmodel.js?v=20150212"></script>
     <script src="js/app/loginviewmodel.js?v=20150212"></script>
     <script src="js/app/overviewviewmodel.js?v=20150212"></script>
-    <script src="js/app/timesheetviewmodel.js?v=20150312"></script>
+    <script src="js/app/timesheetviewmodel.js?v=20150506"></script>
     <script src="js/app/timesheetlineviewmodel.js?v=20150312"></script>
     <script src="js/app/main.dispatcher.js?v=20150212"></script>
     <script src="js/app/main.timesheetfactory.js?v=20150212"></script>

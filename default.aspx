@@ -176,7 +176,12 @@
                     <tbody id="_navigationkeys" data-bind="foreach: lines, visible: isOpen">
                         <!-- ko if ( getLineView() === 'hours' ) -->
                         <tr class="right">
-                            <td style="text-align: left;" data-bind="text: description"></td>
+                            <td style="text-align: left;">
+                                <span data-bind="text: description"></span>
+                                <!-- ko if ( help !== null ) -->
+                                <span class="text-info small" data-bind="text: help"></span>
+                                <!-- /ko -->
+                            </td>
                             <td>
                                 <input type="text" data-bind="hourValue: sunday, attr: {'data-row': $index(), 'data-column': 0}" /></td>
                             <td>
@@ -432,7 +437,7 @@
     <script src="js/app/userviewmodel.js?v=20150212"></script>
     <script src="js/app/loginviewmodel.js?v=20150212"></script>
     <script src="js/app/overviewviewmodel.js?v=20150212"></script>
-    <script src="js/app/timesheetviewmodel.js?v=20150312"></script>
+    <script src="js/app/timesheetviewmodel.js?v=20150506"></script>
     <script src="js/app/timesheetlineviewmodel.js?v=20150312"></script>
     <script src="js/app/main.dispatcher.js?v=20150212"></script>
     <script src="js/app/main.timesheetfactory.js?v=20150212"></script>

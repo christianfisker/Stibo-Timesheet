@@ -16,7 +16,7 @@ STIBO.Timesheet.Configuration = STIBO.Timesheet.Configuration || {};
 STIBO.Timesheet.Configuration.debugActive = false; // REMEMBER - Set to false when LIVE
 
 STIBO.Timesheet.Configuration.companyCode = 'CPV';
-STIBO.Timesheet.Configuration.initialHoursOnTimesheet = 74;
+STIBO.Timesheet.Configuration.initialHoursOnTimesheet = 37; // CPV tæller nedaf for en hel uge
 
 // not in use
 STIBO.Timesheet.Configuration.states = {

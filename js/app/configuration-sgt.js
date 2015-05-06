@@ -86,8 +86,8 @@ STIBO.Timesheet.Configuration.shifts = {
             { id: 'WE2-31', title: 'Week end 2', hours: 31, factor: 1.19, teamId: 'FT' },
 
             // 20150312 cfi/columbus - trykkerassistenter slettet og 2-hold nat tilføjet
-            { id: 'NAT34SPEC', title: 'Nat hold', hours: 34, factor: 1.09, teamId: '2HN' },
-            { id: 'WE1-29', title: 'Week end 1', hours: 29, factor: 1.28, teamId: '2HN' },
+            { id: 'NAT34', title: 'Nat hold', hours: 34, factor: 1.09, teamId: '2HN' },
+            { id: 'WE1-29SPEC', title: 'Week end 1', hours: 29, factor: 1.28, teamId: '2HN' },
 
             //{ id: 'DAG38', title: 'Dag hold', hours: 38, factor: 0.93, teamId: 'TA' },
             //{ id: 'AFTEN38', title: 'Aften hold', hours: 38, factor: 1.09, teamId: 'TA' },
@@ -138,9 +138,9 @@ STIBO.Timesheet.Configuration.lines = {
     locations: {
         'Rotation': [
             { type: 'A', lineView: 'hours', sumGroup: 'hours', description: 'Timer paa arbejdet inkl. overarbejde' },
-            { type: 'B', lineView: 'hours', sumGroup: 'hours', description: 'Forlaegningstillaeg', includeInGroupSum: false },
+            { type: 'B', lineView: 'hours', sumGroup: 'hours', description: 'Forlægning', help: 'antal = 1 på normale vagter', includeInGroupSum: false },
             { type: 'C', lineView: 'hours', sumGroup: 'hours', description: 'Overarbejde 100%', sumNegative: true },
-            { type: 'D', lineView: 'hours', sumGroup: 'hours', description: 'Hensat til afspadsering', includeInGroupSum: false },
+            { type: 'D', lineView: 'hours', sumGroup: 'hours', description: 'Hensat til afspadsering', help: 'skriv i kommentarfelt hvis o.a. ønskes udbetalt', includeInGroupSum: false },
             { type: 'E', lineView: 'hours', sumGroup: 'hours', description: 'Afspadserede timer' },
             { type: 'F', lineView: 'hours', sumGroup: 'hours', description: 'Afsp. Genetimer' },
             { type: 'G', lineView: 'hours', sumGroup: 'hours', description: 'Ferie' },
@@ -152,9 +152,9 @@ STIBO.Timesheet.Configuration.lines = {
         ],
         'Bogbind': [
             { type: 'A', lineView: 'hours', sumGroup: 'hours', description: 'Timer på arbejdet inkl. overarbejde' },
-            { type: 'B', lineView: 'hours', sumGroup: 'hours', description: 'Forlægning', includeInGroupSum: false },
+            { type: 'B', lineView: 'hours', sumGroup: 'hours', description: 'Forlægning', help: 'antal = 1 på normale vagter', includeInGroupSum: false },
             { type: 'C', lineView: 'hours', sumGroup: 'hours', description: 'Overarbejde 100%', sumNegative: true },
-            { type: 'D', lineView: 'hours', sumGroup: 'hours', description: 'Hensat til afspadsering', includeInGroupSum: false },
+            { type: 'D', lineView: 'hours', sumGroup: 'hours', description: 'Hensat til afspadsering', help: 'skriv i kommentarfelt hvis o.a. ønskes udbetalt', includeInGroupSum: false },
             { type: 'E', lineView: 'hours', sumGroup: 'hours', description: 'Afspadserede timer' },
             { type: 'F', lineView: 'hours', sumGroup: 'hours', description: 'Afsp. Genetimer' },
             { type: 'J', lineView: 'hours', sumGroup: 'hours', description: 'Egen sygdom' },
@@ -162,8 +162,8 @@ STIBO.Timesheet.Configuration.lines = {
             { type: 'G', lineView: 'hours', sumGroup: 'hours', description: 'Ferie - antal timer' },
             { type: 'H', lineView: 'hours', sumGroup: 'hours', description: 'Feriefri - antal timer' },
             { type: 'I', lineView: 'hours', sumGroup: 'hours', description: 'Soen-/helligdage - antal timer' },
-            { type: 'L', lineView: 'hours', sumGroup: 'hours', description: 'Aflyst arbejde - firmabetalte timer tastes i "Timer på arbejde"' },
-            { type: 'M', lineView: 'hours', sumGroup: 'hours', description: 'Betalt pause ved arbejde over 2 timer = 0,25 time per dag', includeInGroupSum: false },
+            { type: 'L', lineView: 'hours', sumGroup: 'hours', description: 'Aflyst arbejde', help: 'firmabetalte timer tastes i "Timer på arbejde"' },
+            { type: 'M', lineView: 'hours', sumGroup: 'hours', description: 'Betalt pause', help: 'ved overarbejde over 2 timer = 0,25 time per dag', includeInGroupSum: false },
             { type: 'SUM-HOURS', lineView: 'sum', sumGroup: 'hours', includeInGroupSum: false, saveToDatabase: false },
 
             { type: 'HEADER1', description: 'Maskinfører tillæg (skriv antal timer)', foldGroup: 'fgrp1', saveToDatabase: false },
