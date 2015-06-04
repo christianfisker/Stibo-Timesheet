@@ -53,14 +53,14 @@ STIBO.Timesheet.Configuration.shifts = {
     locations: {
         'Rotation': [
             { id: 'DAG41', title: 'Dag 41', hours: '', factor: 0, teamId: 'ALL' },
-            { id: 'DAG32', title: 'Dag 32', hours: '', factor: 0, teamId: 'ALL' },
+            { id: 'DAG32', title: 'Dag 32 + weekend', hours: '', factor: 0, teamId: 'ALL' },
             { id: 'DAG37', title: 'Dag 37', hours: '', factor: 0, teamId: 'ALL' },
             { id: 'AFTEN', title: 'Aften', hours: '', factor: 0, teamId: 'ALL' },
             { id: 'NAT23', title: 'Nat 23', hours: '', factor: 0, teamId: 'ALL' },
             { id: 'NAT14', title: 'Nat 14', hours: '', factor: 0, teamId: 'ALL' },
-            { id: 'NAT28', title: 'Nat 28', hours: '', factor: 0, teamId: 'ALL' },
-            { id: 'WE1', title: 'Week end 1', hours: '', factor: 0, teamId: 'ALL' },
-            { id: 'WE2', title: 'Week end 2', hours: '', factor: 0, teamId: 'ALL' }
+            { id: 'NAT28', title: 'Nat 28', hours: '', factor: 0, teamId: 'ALL' }//,
+            //{ id: 'WE1', title: 'Week end 1', hours: '', factor: 0, teamId: 'ALL' },
+            //{ id: 'WE2', title: 'Week end 2', hours: '', factor: 0, teamId: 'ALL' }
         ]
     },
     getLocation: function (location) {

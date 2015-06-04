@@ -429,7 +429,7 @@
     <!-- References to custom JavaScript -->
     <script src="js/utils/columbus.jquery.pubsub.js?v=20140926"></script>
     <script src="js/app/utils.js"></script>
-    <script src="js/app/configuration-cpv.js?v=20150312"></script>
+    <script src="js/app/configuration-cpv.js?v=20150604"></script>
     <script src="js/app/dataservice.js?v=20150212"></script>
     <script src="js/app/models.js?v=20150313"></script>
     <script src="js/app/userviewmodel.js?v=20150212"></script>
